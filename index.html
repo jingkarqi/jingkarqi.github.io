@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<!-- 网站基础结构 -->
+<!-- 这是HTML5文档类型声明，确保浏览器以标准模式渲染 -->
+<!-- 页面基础结构开始 -->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- 设置字符编码为UTF-8，支持中文显示 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="jjq的个人网站 - 分享项目、想法和经验">
     <meta name="keywords" content="jjq, GitHub Pages, 个人网站, 项目展示">
@@ -11,26 +15,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+	/* 定义CSS变量控制主题色和视觉效果 */
         :root {
+    /* CSS变量定义区（相当于编程中的变量）
+    这里定义的颜色和效果会在整个样式表中重复使用 */
             --card-bg: rgba(255, 255, 255, 0.7);
             --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.2);
+            --primary-color: #8b5cf6;
+            --hover-color: #4f46e5;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #fff;
             background: #000;
-            perspective: 1000px;
-            overflow-x: hidden;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
+            perspective: 1000px;
         }
 
         #background-card {
@@ -48,94 +56,70 @@
             padding: 2rem;
         }
 
+        /* 毛玻璃效果实现原理：
+         * 1. 使用半透明背景叠加CSS模糊滤镜（backdrop-filter）
+         * 2. blur(8px)应用8像素高斯模糊
+         * 3. -webkit-backdrop-filter确保webkit内核浏览器兼容
+         * 4. 边框和阴影增强层次感 */
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
         header {
             text-align: center;
             padding: 4rem 0;
-            background: rgba(99, 102, 241, 0.2);
-            color: white;
             margin-bottom: 2rem;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.5s ease;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            filter: blur(10px);
-            transform: translateZ(-10px);
-            z-index: -1;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid var(--glass-border);
             border-radius: 15px;
             padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
             display: inline-block;
             transform-style: preserve-3d;
             transition: all 0.3s ease;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px var(--glass-shadow);
         }
 
         h1:hover {
             transform: translateY(-5px) rotateX(10deg);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 24px var(--glass-shadow);
             border-color: rgba(255, 255, 255, 0.5);
         }
 
-        h1::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
-            border-radius: 15px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; }
 
-        h1:hover::before {
-            opacity: 1;
-        }
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+        .content { border-radius: 16px; padding: 2rem; }
 
-        .content {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-        }
-
-        .content:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
+        /* 区块动画配置 | Section animation settings
+         * transition: 同时动画transform和opacity属性，持续500ms
+         * transform-style: preserve-3d 启用三维渲染上下文
+         * cubic-bezier(0.4, 0, 0.2, 1)：
+         *   - 起始加速（0.4,0）快速启动
+         *   - 结束减速（0.2,1）平滑停止
+         * opacity变化：0→1 实现淡入效果
+         * translateY变化：30px→0 实现上浮效果
+         */
+        /* 区块入场动画配置（贝塞尔缓动函数说明）
+         * cubic-bezier(0.4, 0, 0.2, 1) 对应曲线参数：
+         * P0=(0,0), P1=(0.4,0), P2=(0.2,1), P3=(1,1)
+         * 曲线特征：快速启动（初始斜率0.4/0=∞），平滑结束 */
         .section {
             margin-bottom: 2rem;
-            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 1.5rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             transform-style: preserve-3d;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
@@ -153,33 +137,16 @@
 
         .section:hover {
             background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             transform: translateY(-5px) rotateX(10deg) scale(1.02);
         }
 
-        .section::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
-            border-radius: 12px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .section:hover::before {
-            opacity: 1;
-        }
         h2 {
-            color: #8b5cf6;
+            color: var(--primary-color);
             margin-bottom: 1rem;
             text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
 
-        p {
-            margin-bottom: 1rem;
-        }
+        p { margin-bottom: 1rem; }
 
         .social-links {
             display: flex;
@@ -192,51 +159,37 @@
             color: #fff;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .social-links a:hover {
-            background: #4f46e5;
-            color: white;
+            background: var(--hover-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
         }
 
-        .section {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        /* 响应式布局断点 | Responsive layout breakpoint
+         * 移动端优化策略：
+         * - 减小内边距
+         * - 调整标题大小
+         * - 优化元素间距
+         */
+        /* 响应式布局断点选择依据：
+         * 768px对应常见移动设备横屏宽度
+         * 优化策略：
+         * 1. 减少容器内边距（2rem → 1rem）
+         * 2. 缩小主标题字号（2.5rem → 2rem）
+         * 3. 调整头部间距（4rem → 2rem） */
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            header {
-                padding: 2rem 0;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
+            .container { padding: 1rem; }
+            header { padding: 2rem 0; }
+            h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
     <div id="background-card"></div>
-    <header>
+    <header class="glass-effect">
         <div class="container">
             <h1>Welcome to My GitHub Pages</h1>
             <h1>欢迎来到我的 GitHub Pages</h1>
@@ -245,142 +198,174 @@
     </header>
 
     <div class="container">
-        <div class="content">
-            <section class="section">
+        <div class="content glass-effect">
+            <section class="section glass-effect">
                 <h2>About Me</h2>
                 <p>我是jjq</p>
                 <p>Hello! Welcome to my personal website. This site is built using GitHub Pages and serves as a platform to share my projects, thoughts, and experiences.</p>
                 <p>欢迎来到我的个人网站。这个网站是使用 GitHub Pages 构建的，作为一个分享我的项目、想法和经验的平台。</p>
             </section>
 
-            <section class="section">
+            <section class="section glass-effect">
                 <h2>Projects</h2>
                 <p>Here you'll find some of my featured projects and contributions. Stay tuned as I add more content!</p>
                 <p>在这里，你可以找到一些我精选的项目和贡献。敬请期待，我会不断添加更多内容！</p>
             </section>
 
-            <section class="section">
+            <section class="section glass-effect">
                 <h2>Contact</h2>
                 <p>Feel free to reach out to me through any of the following platforms:</p>
                 <p>你可以通过以下任何平台与我联系：</p>
                 <div class="social-links">
-                    <a href="https://github.com/jingkarqi" target="_blank">GitHub</a>
-                    <a href="mailto:SoraET2005@outlook.com">outlook</a>
+                    <a href="https://github.com/jingkarqi" target="_blank" class="glass-effect">GitHub</a>
+                    <a href="mailto:SoraET2005@outlook.com" class="glass-effect">outlook</a>
                 </div>
             </section>
         </div>
     </div>
     <script>
-        // 初始化Three.js场景
-        const scene = new THREE.Scene();
+        // 初始化Three.js场景、相机和渲染器
+// 初始化Three.js的三大核心组件：
+// 1. 场景（Scene） - 所有3D对象的容器
+// 2. 透视相机（PerspectiveCamera） - 决定如何呈现3D场景
+// 3. 渲染器（WebGLRenderer） - 负责将3D场景绘制到网页上
+const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('background-card').appendChild(renderer.domElement);
 
-        // 创建立方体几何体
-        const cubeGeometry = new THREE.BoxGeometry(20, 20, 20);
-        
-        // 创建六个面的材质
-        const createFaceMaterial = (color1, color2) => {
+        /*
+         * 流体背景着色器算法说明 | Fluid Background Shader Algorithm
+         * 1. 基于UV坐标生成动态噪声 | Generate dynamic noise based on UV coordinates
+         * 2. 使用正弦函数创建颜色渐变 | Create color gradient with sine function
+         * 3. 混合噪声与基础颜色混合 | Blend noise with base colors
+         * 4. 添加时间变量实现动画效果 | Animate with time uniform
+         */
+        // 着色器代码定义流动背景效果
+// 着色器代码定义（相当于GPU运行的小程序）
+// vertex着色器处理顶点位置，fragment着色器处理像素颜色
+const shaderCode = {
+            vertex: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragment: `
+                uniform float time;
+                uniform vec3 color1;
+                uniform vec3 color2;
+                varying vec2 vUv;
+                void main() {
+                    float noise = fract(sin(dot(vUv, vec2(12.9898, 78.233)) + time) * 43758.5453);
+                    vec3 color = mix(color1, color2, vUv.x + sin(time * 0.5 + vUv.y * 3.14) * 0.3);
+                    color += noise * 0.03;
+                    gl_FragColor = vec4(color, 0.8);
+                }
+            `
+        };
+
+        /**
+         * 生成立方体面材质 | Generate cube face material
+         * @param {string} color1 - 基础颜色1 | Base color 1
+         * @param {string} color2 - 渐变色 | Gradient color
+         * @returns {THREE.ShaderMaterial} 自定义着色材质 | Custom shader material
+         */
+        // 创建立方体面材质函数
+const createFaceMaterial = (color1, color2) => {
             return new THREE.ShaderMaterial({
                 uniforms: {
                     time: { value: 0 },
                     color1: { value: new THREE.Color(color1) },
                     color2: { value: new THREE.Color(color2) }
                 },
-                vertexShader: `
-                    varying vec2 vUv;
-                    void main() {
-                        vUv = uv;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                    }
-                `,
-                fragmentShader: `
-                    uniform float time;
-                    uniform vec3 color1;
-                    uniform vec3 color2;
-                    varying vec2 vUv;
-                    void main() {
-                        float noise = fract(sin(dot(vUv, vec2(12.9898, 78.233)) + time) * 43758.5453);
-                        vec3 color = mix(color1, color2, vUv.x + sin(time * 0.5 + vUv.y * 3.14) * 0.3);
-                        color += noise * 0.03;
-                        gl_FragColor = vec4(color, 0.8);
-                    }
-                `,
+                vertexShader: shaderCode.vertex,
+                fragmentShader: shaderCode.fragment,
                 transparent: true,
                 side: THREE.DoubleSide
             });
         };
 
-        // 为每个面创建不同的渐变材质
-        const materials = [
-            createFaceMaterial('#6366F1', '#A855F7'), // 前面
-            createFaceMaterial('#8B5CF6', '#D946EF'), // 后面
-            createFaceMaterial('#3B82F6', '#6366F1'), // 顶面
-            createFaceMaterial('#A855F7', '#EC4899'), // 底面
-            createFaceMaterial('#6366F1', '#8B5CF6'), // 右面
-            createFaceMaterial('#A855F7', '#3B82F6')  // 左面
+        const colors = [
+            ['#6366F1', '#A855F7'],
+            ['#8B5CF6', '#D946EF'],
+            ['#3B82F6', '#6366F1'],
+            ['#A855F7', '#EC4899'],
+            ['#6366F1', '#8B5CF6'],
+            ['#A855F7', '#3B82F6']
         ];
 
-        const cube = new THREE.Mesh(cubeGeometry, materials);
+        const cube = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 20, 20),
+            colors.map(([c1, c2]) => createFaceMaterial(c1, c2))
+        );
         scene.add(cube);
-
         camera.position.z = 50;
 
-        // 动画循环
-        function animate() {
+        // 动画循环函数
+// 动画循环函数（每秒执行约60次）
+// 这里更新立方体的旋转角度和位置，产生动画效果
+const animate = () => {
             requestAnimationFrame(animate);
-
             const time = performance.now() * 0.001;
             
-            // 更新每个面的时间uniform
-            cube.material.forEach(material => {
-                material.uniforms.time.value = time;
-            });
-
-            // 创建更流畅的旋转动画
+            cube.material.forEach(material => material.uniforms.time.value = time);
             cube.rotation.x = time * 0.2;
             cube.rotation.y = time * 0.3;
             cube.rotation.z = Math.sin(time * 0.1) * 0.2;
             cube.position.z = Math.sin(time * 0.2) * 3;
 
             renderer.render(scene, camera);
-        }
+        };
 
-        // 响应窗口大小变化
-        window.addEventListener('resize', () => {
+        const onResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        };
 
-        animate();
-
-        // 添加滚动动画和3D效果
-        function checkVisibility() {
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
+        // 区块可见性检测函数
+// 区块可见性检测函数
+// 当用户滚动页面时，检测内容区块是否进入可视区域
+const checkVisibility = () => {
+            document.querySelectorAll('.section').forEach(section => {
                 const rect = section.getBoundingClientRect();
-                const isVisible = (rect.top <= window.innerHeight * 0.8);
-                if (isVisible) {
+                if (rect.top <= window.innerHeight * 0.8) {
                     section.classList.add('visible');
                 }
             });
-        }
+        };
 
-        // 添加视差滚动效果
-        document.addEventListener('mousemove', (e) => {
+        /**
+         * 视差效果处理函数 | Parallax effect handler
+         * 实现步骤：
+         * [1] 获取鼠标坐标：clientX/clientY
+         * [2] 计算中心点偏移量：
+         *     offsetX = (鼠标X / 窗口宽度 - 0.5) * 2
+         *     offsetY = (鼠标Y / 窗口高度 - 0.5) * 2
+         * [3] 转换为旋转角度（最大5度）：
+         *     rotateY = offsetX * 5
+         *     rotateX = offsetY * 5
+         * [4] 应用3D变换矩阵：
+         *     matrix3d()函数实现立体透视效果
+         * [5] 添加缓动过渡：transition 300ms
+         */
+        const handleParallax = (e) => {
             const header = document.querySelector('header');
             const xAxis = Math.max(-2, Math.min(2, (window.innerWidth / 2 - e.pageX) / 15));
             const yAxis = Math.max(-2, Math.min(2, (window.innerHeight / 2 - e.pageY) / 15));
             header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
+        };
 
-        // 初始检查
+        // 添加窗口事件监听
+window.addEventListener('resize', onResize);
+        document.addEventListener('mousemove', handleParallax);
         document.addEventListener('DOMContentLoaded', checkVisibility);
-        // 滚动时检查
         window.addEventListener('scroll', checkVisibility);
+
+        animate();
     </script>
 </body>
 </html>
