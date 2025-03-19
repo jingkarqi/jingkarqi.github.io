@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="jjq的个人网站 - 分享项目、想法和经验">
+    <meta name="keywords" content="jjq, GitHub Pages, 个人网站, 项目展示">
+    <meta name="author" content="jjq">
     <title>Welcome to My GitHub Pages</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         * {
             margin: 0;
@@ -81,6 +86,19 @@
         .social-links a:hover {
             background: #4f46e5;
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @media (max-width: 768px) {
@@ -102,6 +120,7 @@
     <header>
         <div class="container">
             <h1>Welcome to My GitHub Pages</h1>
+            <h1>欢迎来到我的 GitHub Pages</h1>
             <div class="subtitle">A Personal Website Built with GitHub Pages</div>
         </div>
     </header>
@@ -110,22 +129,45 @@
         <div class="content">
             <section class="section">
                 <h2>About Me</h2>
+                <p>我是jjq</p>
                 <p>Hello! Welcome to my personal website. This site is built using GitHub Pages and serves as a platform to share my projects, thoughts, and experiences.</p>
+                <p>欢迎来到我的个人网站。这个网站是使用 GitHub Pages 构建的，作为一个分享我的项目、想法和经验的平台。</p>
             </section>
 
             <section class="section">
                 <h2>Projects</h2>
                 <p>Here you'll find some of my featured projects and contributions. Stay tuned as I add more content!</p>
+                <p>在这里，你可以找到一些我精选的项目和贡献。敬请期待，我会不断添加更多内容！</p>
             </section>
 
             <section class="section">
                 <h2>Contact</h2>
                 <p>Feel free to reach out to me through any of the following platforms:</p>
+                <p>你可以通过以下任何平台与我联系：</p>
                 <div class="social-links">
                     <a href="https://github.com/jingkarqi" target="_blank">GitHub</a>
+                    <a href="mailto:SoraET2005@outlook.com">outlook</a>
                 </div>
             </section>
         </div>
     </div>
+    <script>
+        // 添加滚动动画
+        function checkVisibility() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const isVisible = (rect.top <= window.innerHeight * 0.8);
+                if (isVisible) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+
+        // 初始检查
+        document.addEventListener('DOMContentLoaded', checkVisibility);
+        // 滚动时检查
+        window.addEventListener('scroll', checkVisibility);
+    </script>
 </body>
 </html>
