@@ -1,0 +1,125 @@
+:root {
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: rgba(0, 0, 0, 0.2);
+    --primary-color: #8b5cf6;
+    --hover-color: #4f46e5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #fff;
+    background: #000;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    perspective: 1000px;
+}
+
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+.compact-header {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 2rem 1rem !important;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    header {
+        padding: 2rem 0;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+.project-detail {
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.project-detail h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1rem;
+}
+
+.project-detail pre {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.project-detail code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #8b5cf6;
+}
+
+.project-detail ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.project-detail li {
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.project-detail li::before {
+    content: '▶';
+    color: var(--primary-color);
+    position: absolute;
+    left: -1.2rem;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+    border-color: var(--glass-border);
+}
+
+.nav-link.active {
+    background: var(--primary-color);
+    font-weight: bold;
+    box-shadow: 0 0 10px var(--primary-color);
+}

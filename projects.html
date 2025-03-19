@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | jjq's GitHub Pages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+	/* 定义CSS变量控制主题色和视觉效果 */
+        :root {
+    /* CSS变量定义区（相当于编程中的变量）
+    这里定义的颜色和效果会在整个样式表中重复使用 */
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.2);
+            --primary-color: #8b5cf6;
+            --hover-color: #4f46e5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #000;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        #background-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 毛玻璃效果实现原理：
+         * 1. 使用半透明背景叠加CSS模糊滤镜（backdrop-filter）
+         * 2. blur(8px)应用8像素高斯模糊
+         * 3. -webkit-backdrop-filter确保webkit内核浏览器兼容
+         * 4. 边框和阴影增强层次感 */
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
+        .compact-header {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 2rem 1rem !important;
+            border-radius: 12px;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 8px 16px var(--glass-shadow);
+        }
+
+        h1:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: 0 12px 24px var(--glass-shadow);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle { font-size: 1.2rem; opacity: 0.9; }
+
+        .content { border-radius: 16px; padding: 2rem; }
+
+        /* 区块动画配置 | Section animation settings
+         * transition: 同时动画transform和opacity属性，持续500ms
+         * transform-style: preserve-3d 启用三维渲染上下文
+         * cubic-bezier(0.4, 0, 0.2, 1)：
+         *   - 起始加速（0.4,0）快速启动
+         *   - 结束减速（0.2,1）平滑停止
+         * opacity变化：0→1 实现淡入效果
+         * translateY变化：30px→0 实现上浮效果
+         */
+        /* 区块入场动画配置（贝塞尔缓动函数说明）
+         * cubic-bezier(0.4, 0, 0.2, 1) 对应曲线参数：
+         * P0=(0,0), P1=(0.4,0), P2=(0.2,1), P3=(1,1)
+         * 曲线特征：快速启动（初始斜率0.4/0=∞），平滑结束 */
+        .section {
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .section:nth-child(1) { transition-delay: 0s; }
+        .section:nth-child(2) { transition-delay: 0s; }
+        .section:nth-child(3) { transition-delay: 0s; }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px) rotateX(10deg) scale(1.02);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        p { margin-bottom: 1rem; }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+            border-color: var(--glass-border);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* 响应式布局断点 | Responsive layout breakpoint
+         * 移动端优化策略：
+         * - 减小内边距
+         * - 调整标题大小
+         * - 优化元素间距
+         */
+        /* 响应式布局断点选择依据：
+         * 768px对应常见移动设备横屏宽度
+         * 优化策略：
+         * 1. 减少容器内边距（2rem → 1rem）
+         * 2. 缩小主标题字号（2.5rem → 2rem）
+         * 3. 调整头部间距（4rem → 2rem） */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 0; }
+            h1 { font-size: 2rem; }
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        .project-detail {
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .project-detail h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+        }
+
+        .project-detail pre {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .project-detail code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #8b5cf6;
+        }
+
+        .project-detail ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .project-detail li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+
+        .project-detail li::before {
+            content: '▶';
+            color: var(--primary-color);
+            position: absolute;
+            left: -1.2rem;
+        }
+        .language-url {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .language-shell {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="background-card"></div>
+    <header class="glass-effect compact-header">
+        <div class="container">
+            <h1>Welcome to My Project Pages</h1>
+            <h1>欢迎来到我的 Project Pages</h1>
+            <div class="subtitle">A Personal Website Built with GitHub Pages</div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="content glass-effect project-detail">
+            <article class="section">
+                <h3>jjq_private_GKD_rules</h3>
+                <p class="subtitle">适用于GKD的自定义规则集</p>
+                
+                <h4>使用方法</h4>
+                <ul>
+                    <li>安装 GKD APP</li>
+                    <li>在 GKD 订阅管理中添加以下订阅地址：
+                        <pre><code class="language-url">https://raw.githubusercontent.com/jingkarqi/jjq_private_GKD_rules/main/raw/jjq.json5</code></pre>
+                    </li>
+                    <li>国内用户请使用以下订阅地址：
+                        <pre><code class="language-url">https://hub.gitmirror.com/https://raw.githubusercontent.com/jingkarqi/jjq_private_GKD_rules/main/raw/jjq.json5</code></pre>
+                    </li>
+                </ul>
+
+                <h4>更新日志</h4>
+                <ul>
+                    <li>初始版本发布</li>
+                    <li>支持多个应用的广告拦截规则</li>
+                </ul>
+
+                <h4>问题反馈</h4>
+                <p>如有问题请提交 Issue</a></p>
+            </article>
+        </div>
+        <div class="content glass-effect project-detail">
+            <article class="section">
+                <h3>OCR-Translate-Test</h3>
+                <p class="subtitle">基于多模态大模型的OCR翻译处理工具</p>
+                
+                <h4>功能特性</h4>
+                <ul>
+                    <li>支持图片OCR文字识别</li>
+                    <li>支持多模态大模型翻译</li>
+                    <li>支持JSON格式结果输出</li>
+                </ul>
+            
+                <h4>安装指南</h4>
+                <pre><code class="language-bash">pip install -r requirements.txt</code></pre>
+            
+                <h4>使用示例</h4>
+                <pre><code class="language-python"># 执行图片处理
+python pic-response.py input.jpg
+
+# 执行批量翻译
+python translator.py</code></pre>
+            
+                <h4>项目结构</h4>
+                <pre>
+                    <code class="language-shell">
+GITS/
+├── input_images/        # 原始图片目录
+├── json-result/         # 图片处理结果
+├── translated-result/   # 翻译结果
+├── config.py            # API配置
+├── pic-response.py      # 图片处理主程序
+├── translator.py        # 翻译程序
+└── qwen_vl_extractor.py # 图片处理核心模块
+                    </code>
+                </pre>
+            
+                <h4>开源协议</h4>
+                <p>MIT License</p>
+            </article>
+        </div>
+    </div>
+
+
+    <script src="assets/js/background-animation.js"></script>
+    <script src="assets/js/content-animation.js"></script>
+</body>
+</html>

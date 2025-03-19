@@ -69,6 +69,13 @@
             box-shadow: 0 8px 32px var(--glass-shadow);
         }
 
+        .compact-header {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 2rem 1rem !important;
+            border-radius: 12px;
+        }
+
         header {
             text-align: center;
             padding: 4rem 0;
@@ -121,14 +128,14 @@
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             transform: translateY(30px);
         }
 
-        .section:nth-child(1) { transition-delay: 0.1s; }
-        .section:nth-child(2) { transition-delay: 0.3s; }
-        .section:nth-child(3) { transition-delay: 0.5s; }
+        .section:nth-child(1) { transition-delay: 0s; }
+        .section:nth-child(2) { transition-delay: 0s; }
+        .section:nth-child(3) { transition-delay: 0s; }
 
         .section.visible {
             opacity: 1;
@@ -168,6 +175,46 @@
             transform: translateY(-2px);
         }
 
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+            border-color: var(--glass-border);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
         /* 响应式布局断点 | Responsive layout breakpoint
          * 移动端优化策略：
          * - 减小内边距
@@ -189,11 +236,15 @@
 </head>
 <body>
     <div id="background-card"></div>
-    <header class="glass-effect">
+    <header class="glass-effect compact-header">
         <div class="container">
             <h1>Welcome to My GitHub Pages</h1>
             <h1>欢迎来到我的 GitHub Pages</h1>
             <div class="subtitle">A Personal Website Built with GitHub Pages</div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+            </nav>
         </div>
     </header>
 
@@ -216,6 +267,7 @@
                 <h2>Contact</h2>
                 <p>Feel free to reach out to me through any of the following platforms:</p>
                 <p>你可以通过以下任何平台与我联系：</p>
+
                 <div class="social-links">
                     <a href="https://github.com/jingkarqi" target="_blank" class="glass-effect">GitHub</a>
                     <a href="mailto:SoraET2005@outlook.com" class="glass-effect">outlook</a>
