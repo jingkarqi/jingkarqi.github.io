@@ -9,6 +9,7 @@
     <title>Welcome to My GitHub Pages</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,11 +17,29 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f5f5f5;
+            background: #000;
+            perspective: 1000px;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #background-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .container {
@@ -32,9 +51,27 @@
         header {
             text-align: center;
             padding: 4rem 0;
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            background: rgba(99, 102, 241, 0.2);
             color: white;
             margin-bottom: 2rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            filter: blur(10px);
+            transform: translateZ(-10px);
+            z-index: -1;
         }
 
         h1 {
@@ -48,19 +85,37 @@
         }
 
         .content {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .content:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
         .section {
             margin-bottom: 2rem;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section:hover {
+            transform: translateZ(20px);
         }
 
         h2 {
-            color: #4f46e5;
+            color: #8b5cf6;
             margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
 
         p {
@@ -75,12 +130,16 @@
         }
 
         .social-links a {
-            color: #4f46e5;
+            color: #fff;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border: 1px solid #4f46e5;
-            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .social-links a:hover {
@@ -117,6 +176,7 @@
     </style>
 </head>
 <body>
+    <div id="background-card"></div>
     <header>
         <div class="container">
             <h1>Welcome to My GitHub Pages</h1>
@@ -152,7 +212,73 @@
         </div>
     </div>
     <script>
-        // 添加滚动动画
+        // 初始化Three.js场景
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('background-card').appendChild(renderer.domElement);
+
+        // 创建渐变材质
+        const cardGeometry = new THREE.PlaneGeometry(30, 40);
+        const cardMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 }
+            },
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                varying vec2 vUv;
+                void main() {
+                    vec3 color1 = vec3(0.388, 0.400, 0.945); // #6366F1
+                    vec3 color2 = vec3(0.659, 0.333, 0.969); // #A855F7
+                    float noise = fract(sin(dot(vUv, vec2(12.9898, 78.233)) + time) * 43758.5453);
+                    vec3 color = mix(color1, color2, vUv.x + sin(time * 0.5) * 0.2);
+                    color += noise * 0.02;
+                    gl_FragColor = vec4(color, 0.7);
+                }
+            `,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+
+        const card = new THREE.Mesh(cardGeometry, cardMaterial);
+        scene.add(card);
+
+        camera.position.z = 40;
+
+        // 动画循环
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 更新时间uniform
+            cardMaterial.uniforms.time.value = performance.now() * 0.001;
+
+            // 使用正弦和余弦函数创建平滑的旋转动画
+            const time = performance.now() * 0.001;
+            card.rotation.x = Math.sin(time * 0.5) * 1;
+            card.rotation.y = Math.cos(time * 0.4) * 1;
+            card.position.z = Math.sin(time * 0.3) * 2;
+
+            renderer.render(scene, camera);
+        }
+
+        // 响应窗口大小变化
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+
+        // 添加滚动动画和3D效果
         function checkVisibility() {
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => {
@@ -163,6 +289,14 @@
                 }
             });
         }
+
+        // 添加视差滚动效果
+        document.addEventListener('mousemove', (e) => {
+            const header = document.querySelector('header');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
 
         // 初始检查
         document.addEventListener('DOMContentLoaded', checkVisibility);
