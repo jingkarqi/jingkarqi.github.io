@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-	/* 定义CSS变量控制主题色和视觉效果 */
         :root {
-    /* CSS变量定义区（相当于编程中的变量）
-    这里定义的颜色和效果会在整个样式表中重复使用 */
             --card-bg: rgba(255, 255, 255, 0.7);
             --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
             --glass-bg: rgba(255, 255, 255, 0.1);
@@ -18,15 +15,25 @@
             --glass-shadow: rgba(0, 0, 0, 0.2);
             --primary-color: #8b5cf6;
             --hover-color: #4f46e5;
+            --background-color: #000;
+            --text-color: #fff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        [data-theme="dark"] {
+            --background-color: #000;
+            --text-color: #fff;
+        }
+
+        [data-theme="light"] {
+            --background-color: #fff;
+            --text-color: #000;
+        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #fff;
-            background: #000;
+            color: var(--text-color);
+            background: var(--background-color);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -48,11 +55,6 @@
             padding: 2rem;
         }
 
-        /* 毛玻璃效果实现原理：
-         * 1. 使用半透明背景叠加CSS模糊滤镜（backdrop-filter）
-         * 2. blur(8px)应用8像素高斯模糊
-         * 3. -webkit-backdrop-filter确保webkit内核浏览器兼容
-         * 4. 边框和阴影增强层次感 */
         .glass-effect {
             background: var(--glass-bg);
             backdrop-filter: blur(8px);
@@ -100,19 +102,6 @@
 
         .content { border-radius: 16px; padding: 2rem; }
 
-        /* 区块动画配置 | Section animation settings
-         * transition: 同时动画transform和opacity属性，持续500ms
-         * transform-style: preserve-3d 启用三维渲染上下文
-         * cubic-bezier(0.4, 0, 0.2, 1)：
-         *   - 起始加速（0.4,0）快速启动
-         *   - 结束减速（0.2,1）平滑停止
-         * opacity变化：0→1 实现淡入效果
-         * translateY变化：30px→0 实现上浮效果
-         */
-        /* 区块入场动画配置（贝塞尔缓动函数说明）
-         * cubic-bezier(0.4, 0, 0.2, 1) 对应曲线参数：
-         * P0=(0,0), P1=(0.4,0), P2=(0.2,1), P3=(1,1)
-         * 曲线特征：快速启动（初始斜率0.4/0=∞），平滑结束 */
         .section {
             margin-bottom: 2rem;
             border-radius: 12px;
@@ -208,18 +197,6 @@
             }
         }
 
-        /* 响应式布局断点 | Responsive layout breakpoint
-         * 移动端优化策略：
-         * - 减小内边距
-         * - 调整标题大小
-         * - 优化元素间距
-         */
-        /* 响应式布局断点选择依据：
-         * 768px对应常见移动设备横屏宽度
-         * 优化策略：
-         * 1. 减少容器内边距（2rem → 1rem）
-         * 2. 缩小主标题字号（2.5rem → 2rem）
-         * 3. 调整头部间距（4rem → 2rem） */
         @media (max-width: 768px) {
             .container { padding: 1rem; }
             header { padding: 2rem 0; }
@@ -293,7 +270,18 @@
             text-decoration: none;
             font-weight: bold;
         }
-
+        #theme-toggle {
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -309,7 +297,7 @@
             </nav>
         </div>
     </header>
-    
+    <button id="theme-toggle">☀️</button>
     <div class="container">
         <div class="content glass-effect project-detail">
             <article class="section">
@@ -382,5 +370,135 @@ GITS/
 
     <script src="assets/js/background-animation.js"></script>
     <script src="assets/js/content-animation.js"></script>
+    <script>
+        // 初始化Three.js场景、相机和渲染器
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('background-card').appendChild(renderer.domElement);
+
+        const shaderCode = {
+            vertex: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragment: `
+                uniform float time;
+                uniform vec3 color1;
+                uniform vec3 color2;
+                varying vec2 vUv;
+                void main() {
+                    float noise = fract(sin(dot(vUv, vec2(12.9898, 78.233)) + time) * 43758.5453);
+                    vec3 color = mix(color1, color2, vUv.x + sin(time * 0.5 + vUv.y * 3.14) * 0.3);
+                    color += noise * 0.03;
+                    gl_FragColor = vec4(color, 0.8);
+                }
+            `
+        };
+
+        const createFaceMaterial = (color1, color2) => {
+            return new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    color1: { value: new THREE.Color(color1) },
+                    color2: { value: new THREE.Color(color2) }
+                },
+                vertexShader: shaderCode.vertex,
+                fragmentShader: shaderCode.fragment,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+        };
+
+        const colors = [
+            ['#6366F1', '#A855F7'],
+            ['#8B5CF6', '#D946EF'],
+            ['#3B82F6', '#6366F1'],
+            ['#A855F7', '#EC4899'],
+            ['#6366F1', '#8B5CF6'],
+            ['#A855F7', '#3B82F6']
+        ];
+
+        const cube = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 20, 20),
+            colors.map(([c1, c2]) => createFaceMaterial(c1, c2))
+        );
+        scene.add(cube);
+        camera.position.z = 50;
+
+        const animate = () => {
+            requestAnimationFrame(animate);
+            const time = performance.now() * 0.001;
+            
+            cube.material.forEach(material => material.uniforms.time.value = time);
+            cube.rotation.x = time * 0.2;
+            cube.rotation.y = time * 0.3;
+            cube.rotation.z = Math.sin(time * 0.1) * 0.2;
+            cube.position.z = Math.sin(time * 0.2) * 3;
+
+            renderer.render(scene, camera);
+        };
+
+        const onResize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+
+        const checkVisibility = () => {
+            document.querySelectorAll('.section').forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight * 0.8) {
+                    section.classList.add('visible');
+                }
+            });
+        };
+
+        const handleParallax = (e) => {
+            const header = document.querySelector('header');
+            const xAxis = Math.max(-2, Math.min(2, (window.innerWidth / 2 - e.pageX) / 15));
+            const yAxis = Math.max(-2, Math.min(2, (window.innerHeight / 2 - e.pageY) / 15));
+            header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        };
+
+        window.addEventListener('resize', onResize);
+        document.addEventListener('mousemove', handleParallax);
+        document.addEventListener('DOMContentLoaded', checkVisibility);
+        window.addEventListener('scroll', checkVisibility);
+
+        animate();
+
+        // 添加主题切换逻辑
+        const toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // 更新按钮图标
+            const themeToggleButton = document.getElementById('theme-toggle');
+            themeToggleButton.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+
+            // 更新社交链接颜色
+            const socialLinks = document.querySelectorAll('.social-links a');
+            socialLinks.forEach(link => {
+                link.style.color = newTheme === 'dark' ? '#fff' : '#000';
+            });
+        };
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // 初始化按钮图标
+        const themeToggleButton = document.getElementById('theme-toggle');
+        themeToggleButton.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    </script>
 </body>
 </html>
