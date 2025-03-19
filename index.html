@@ -293,8 +293,8 @@
         // 添加视差滚动效果
         document.addEventListener('mousemove', (e) => {
             const header = document.querySelector('header');
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            const xAxis = Math.max(-10, Math.min(10, (window.innerWidth / 2 - e.pageX) / 25));
+            const yAxis = Math.max(-10, Math.min(10, (window.innerHeight / 2 - e.pageY) / 25));
             header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
