@@ -1,103 +1,123 @@
+/* 定义全局CSS变量，可以在整个网站中复用这些颜色和样式 */
 :root {
-  --card-bg: rgba(255, 255, 255, 0.7);
-  --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.2);
-  --primary-color: #8b5cf6;
-  --hover-color: #4f46e5;
-  --background-color: #000;
-  --text-color: #fff;
+  --card-bg: rgba(255, 255, 255, 0.7);          /* 卡片背景色：半透明白色 */
+  --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);  /* 标题背景：渐变色 */
+  --glass-bg: rgba(255, 255, 255, 0.1);         /* 毛玻璃效果背景色 */
+  --glass-border: rgba(255, 255, 255, 0.2);     /* 毛玻璃效果边框色 */
+  --glass-shadow: rgba(0, 0, 0, 0.2);           /* 毛玻璃效果阴影色 */
+  --primary-color: #8b5cf6;                     /* 主要颜色：紫色 */
+  --hover-color: #4f46e5;                       /* 悬停颜色：深紫色 */
+  --background-color: #000;                     /* 背景颜色：黑色 */
+  --text-color: #fff;                           /* 文字颜色：白色 */
 }
 
+/* 深色主题的颜色配置 */
 [data-theme="dark"] {
-  --background-color: #000;
-  --text-color: #fff;
+  --background-color: #000;                     /* 深色主题背景：黑色 */
+  --text-color: #fff;                           /* 深色主题文字：白色 */
 }
 
+/* 浅色主题的颜色配置 */
 [data-theme="light"] {
-  --background-color: #fff;
-  --text-color: #000;
-  --glass-bg: rgba(0, 0, 0, 0.1);
-  --glass-border: rgba(0, 0, 0, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.1);
-  --primary-color: #6366F1;
-  --hover-color: #4F46E5;
+  --background-color: #fff;                     /* 浅色主题背景：白色 */
+  --text-color: #000;                           /* 浅色主题文字：黑色 */
+  --glass-bg: rgba(0, 0, 0, 0.1);              /* 浅色主题毛玻璃背景 */
+  --glass-border: rgba(0, 0, 0, 0.2);          /* 浅色主题毛玻璃边框 */
+  --glass-shadow: rgba(0, 0, 0, 0.1);          /* 浅色主题毛玻璃阴影 */
+  --primary-color: #6366F1;                     /* 浅色主题主要颜色 */
+  --hover-color: #4F46E5;                       /* 浅色主题悬停颜色 */
 }
 
+/* 网页主体样式 */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
-  color: var(--text-color);
-  background: var(--background-color);
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  perspective: 1000px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;  /* 设置字体族 */
+  line-height: 1.6;                             /* 行高为1.6倍 */
+  color: var(--text-color);                     /* 文字颜色使用变量 */
+  background: var(--background-color);          /* 背景颜色使用变量 */
+  min-height: 100vh;                           /* 最小高度为视窗高度 */
+  position: relative;                          /* 相对定位 */
+  overflow-x: hidden;                          /* 隐藏水平滚动条 */
+  perspective: 1000px;                         /* 3D视角效果 */
 }
 
+/* 背景卡片样式 */
 #background-card {
-  position: fixed;
+  position: fixed;                             /* 固定定位 */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -1;                                /* 置于最底层 */
 }
 
+/* 容器样式 */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 1200px;                          /* 最大宽度1200像素 */
+  margin: 0 auto;                             /* 水平居中 */
+  padding: 2rem;                              /* 内边距2rem */
 }
 
+/* 毛玻璃效果样式 */
 .glass-effect {
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px var(--glass-shadow);
+  background: var(--glass-bg);                /* 半透明背景 */
+  backdrop-filter: blur(8px);                 /* 背景模糊效果 */
+  -webkit-backdrop-filter: blur(8px);         /* Safari浏览器兼容 */
+  border: 1px solid var(--glass-border);      /* 边框 */
+  box-shadow: 0 8px 32px var(--glass-shadow); /* 阴影效果 */
 }
 
+/* 紧凑型页头样式 */
 .compact-header {
   max-width: 1150px;
   margin: 0 auto;
   padding: 2rem 1rem !important;
-  border-radius: 12px;
+  border-radius: 12px;                        /* 圆角边框 */
 }
 
+/* 页头样式 */
 header {
-  text-align: center;
+  text-align: center;                         /* 文字居中 */
   padding: 4rem 0;
   margin-bottom: 2rem;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
+  transform-style: preserve-3d;               /* 3D变换样式 */
+  transition: transform 0.5s ease;            /* 变换过渡效果 */
 }
 
+/* 一级标题样式 */
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.5rem;                          /* 字体大小 */
   margin-bottom: 1rem;
-  border: 2px solid var(--glass-border);
-  border-radius: 15px;
+  border: 2px solid var(--glass-border);      /* 边框 */
+  border-radius: 15px;                        /* 圆角 */
   padding: 0.5rem 1.5rem;
   display: inline-block;
-  transform-style: preserve-3d;
-  transition: all 0.3s ease;
+  transform-style: preserve-3d;               /* 3D变换 */
+  transition: all 0.3s ease;                  /* 过渡效果 */
   position: relative;
-  box-shadow: 0 8px 16px var(--glass-shadow);
+  box-shadow: 0 8px 16px var(--glass-shadow); /* 阴影 */
 }
 
+/* 一级标题悬停效果 */
 h1:hover {
-  transform: translateY(-5px) rotateX(10deg);
-  box-shadow: 0 12px 24px var(--glass-shadow);
-  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-5px) rotateX(10deg);  /* 上移并旋转 */
+  box-shadow: 0 12px 24px var(--glass-shadow); /* 更大的阴影 */
+  border-color: rgba(255, 255, 255, 0.5);      /* 边框颜色变化 */
 }
 
-.subtitle { font-size: 1.2rem; opacity: 0.9; }
+/* 副标题样式 */
+.subtitle { 
+  font-size: 1.2rem; 
+  opacity: 0.9; 
+}
 
-.content { border-radius: 16px; padding: 2rem; }
+/* 内容区域样式 */
+.content { 
+  border-radius: 16px; 
+  padding: 2rem; 
+}
 
+/* 章节样式 */
 .section {
   margin-bottom: 2rem;
   border-radius: 12px;
@@ -106,48 +126,58 @@ h1:hover {
   overflow: hidden;
   transform-style: preserve-3d;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 0;                                  /* 初始透明 */
+  transform: translateY(30px);                 /* 初始向下偏移 */
 }
 
+/* 可见章节样式 */
 .section.visible {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1;                                  /* 完全不透明 */
+  transform: translateY(0);                    /* 恢复原位 */
 }
 
+/* 章节悬停效果 */
 .section:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-5px) rotateX(10deg) scale(1.02);
+  background: rgba(255, 255, 255, 0.15);       /* 背景微亮 */
+  transform: translateY(-5px) rotateX(10deg) scale(1.02); /* 上移、旋转并放大 */
 }
 
+/* 二级标题样式 */
 h2 {
-  color: var(--primary-color);
+  color: var(--primary-color);                 /* 使用主色 */
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5); /* 发光效果 */
 }
 
-p { margin-bottom: 1rem; }
+/* 段落样式 */
+p { 
+  margin-bottom: 1rem; 
+}
 
+/* 社交链接容器样式 */
 .social-links {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+  display: flex;                               /* 弹性布局 */
+  justify-content: center;                     /* 居中对齐 */
+  gap: 1rem;                                   /* 间距 */
   margin-top: 2rem;
 }
 
+/* 社交链接样式 */
 .social-links a {
   color: var(--text-color);
-  text-decoration: none;
+  text-decoration: none;                       /* 无下划线 */
   padding: 0.5rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
+/* 社交链接悬停效果 */
 .social-links a:hover {
-  background: var(--hover-color);
-  transform: translateY(-2px);
+  background: var(--hover-color);              /* 背景色变化 */
+  transform: translateY(-2px);                 /* 微微上浮 */
 }
 
+/* 导航链接容器样式 */
 .nav-links {
   display: flex;
   justify-content: center;
@@ -155,121 +185,138 @@ p { margin-bottom: 1rem; }
   margin-top: 1rem;
 }
 
+/* 导航链接样式 */
 .nav-link {
   color: var(--text-color);
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
-  border: 1px solid transparent;
+  border: 1px solid transparent;               /* 透明边框 */
 }
 
+/* 导航链接悬停效果 */
 .nav-link:hover {
   background: var(--hover-color);
   transform: translateY(-2px);
-  border-color: var(--glass-border);
+  border-color: var(--glass-border);           /* 显示边框 */
 }
 
+/* 当前激活的导航链接样式 */
 .nav-link.active {
-  background: var(--primary-color);
-  font-weight: bold;
-  box-shadow: 0 0 10px var(--primary-color);
+  background: var(--primary-color);            /* 主色背景 */
+  font-weight: bold;                           /* 加粗 */
+  box-shadow: 0 0 10px var(--primary-color);   /* 发光效果 */
 }
 
+/* 移动端适配 - 导航链接 */
 @media (max-width: 768px) {
   .nav-links {
-    flex-direction: column;
+    flex-direction: column;                    /* 改为垂直排列 */
     align-items: center;
     gap: 0.5rem;
   }
 
   .nav-link {
-    width: 100%;
+    width: 100%;                              /* 占满宽度 */
     text-align: center;
   }
 }
 
+/* 移动端适配 - 容器和标题 */
 @media (max-width: 768px) {
   .container { padding: 1rem; }
   header { padding: 2rem 0; }
   h1 { font-size: 2rem; }
 }
 
+/* 项目详情样式 */
 .project-detail {
   padding: 2rem;
   margin-bottom: 2rem;
 }
 
+/* 主题切换按钮样式 */
 #theme-toggle {
-  position: fixed;
+  position: fixed;                             /* 固定位置 */
   top: 20px;
   right: 20px;
   padding: 10px;
   font-size: 1.5rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 1000;
+  border-radius: 50%;                          /* 圆形按钮 */
+  cursor: pointer;                             /* 鼠标指针 */
+  z-index: 1000;                              /* 置于顶层 */
   transition: all 0.3s ease;
 }
 
+/* 主题切换按钮悬停效果 */
 #theme-toggle:hover {
-  transform: scale(1.1);
+  transform: scale(1.1);                       /* 放大效果 */
   background: var(--hover-color);
   color: var(--text-color);
   border-color: var(--text-color);
 }
 
+/* 项目详情三级标题样式 */
 .project-detail h3 {
   font-size: 1.5rem;
   margin-bottom: 1.2rem;
-  border-left: 4px solid var(--primary-color);
+  border-left: 4px solid var(--primary-color); /* 左边框装饰 */
   padding-left: 1rem;
 }
 
+/* 项目详情代码块样式 */
 .project-detail pre {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3);              /* 深色背景 */
   border-radius: 8px;
   padding: 1rem;
-  overflow-x: auto;
+  overflow-x: auto;                            /* 横向可滚动 */
 }
 
+/* 项目详情代码样式 */
 .project-detail code {
-  font-family: 'Courier New', monospace;
+  font-family: 'Courier New', monospace;       /* 等宽字体 */
   font-size: 0.9rem;
-  color: #8b5cf6;
+  color: #8b5cf6;                             /* 代码颜色 */
 }
 
+/* 项目详情列表样式 */
 .project-detail ul {
   margin: 1rem 0;
   padding-left: 2rem;
 }
 
+/* 项目详情列表项样式 */
 .project-detail li {
   margin-bottom: 0.8rem;
   position: relative;
 }
 
+/* 列表项前的装饰符号 */
 .project-detail li::before {
-  content: '▶';
+  content: '▶';                                /* 箭头符号 */
   color: var(--primary-color);
   position: absolute;
   left: -1.2rem;
 }
 
+/* URL链接样式 */
 .language-url {
   color: #ffffff;
   text-decoration: none;
   font-weight: bold;
 }
 
+/* Shell命令样式 */
 .language-shell {
   color: #ffffff;
   text-decoration: none;
   font-weight: bold;
 }
 
+/* 主题切换按钮样式（重复定义，建议合并） */
 #theme-toggle {
   font-size: 2rem;
   cursor: pointer;

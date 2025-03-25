@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="dark">
 <head>
+    <!-- 设置网页的基本信息和编码方式 -->
     <meta charset="UTF-8">
+    <!-- 设置移动设备的视口 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 网页标题 -->
     <title>Projects | jjq's GitHub Pages</title>
+    <!-- 引入动画CSS库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- 引入Three.js 3D渲染库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- 引入自定义样式表 -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+    <!-- 背景动画容器 -->
     <div id="background-card"></div>
+    <!-- 页面头部，使用玻璃效果 -->
     <header class="glass-effect compact-header">
         <div class="container">
+            <!-- 双语标题 -->
             <h1>Welcome to My Project Pages</h1>
             <h1>欢迎来到我的 Project Pages</h1>
             <div class="subtitle">A Personal Website Built with GitHub Pages</div>
+            <!-- 导航链接 -->
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="projects.html" class="nav-link active">Projects</a>
             </nav>
         </div>
     </header>
+    <!-- 主题切换按钮 -->
     <button id="theme-toggle">☀️</button>
+
+    <!-- 主要内容区域 -->
     <div class="container">
+        <!-- 项目展示区域1：GKD规则 -->
         <div class="content glass-effect project-detail">
-            <article class="section">
+            <article class="section glass-effect">
                 <h3>jjq_private_GKD_rules</h3>
                 <p class="subtitle">适用于GKD的自定义规则集</p>
                 
@@ -46,11 +60,13 @@
                 </ul>
 
                 <h4>问题反馈</h4>
-                <p>如有问题请提交 Issue</a></p>
+                <p>如有问题请提交 Issue</p>
             </article>
         </div>
+
+        <!-- 项目展示区域2：OCR翻译工具 -->
         <div class="content glass-effect project-detail">
-            <article class="section">
+            <article class="section glass-effect">
                 <h3>OCR-Translate-Test</h3>
                 <p class="subtitle">基于多模态大模型的OCR翻译处理工具</p>
                 
@@ -91,19 +107,22 @@ GITS/
         </div>
     </div>
 
-
+    <!-- 引入外部JavaScript文件 -->
     <script src="assets/js/background-animation.js"></script>
     <script src="assets/js/theme-toggle.js"></script>
     <script src="assets/js/content-animation.js"></script>
     <script>
-        // 初始化Three.js场景、相机和渲染器
+        // Three.js 3D动画相关代码
+        // 创建3D场景、相机和渲染器
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('background-card').appendChild(renderer.domElement);
 
+        // 定义着色器代码
         const shaderCode = {
+            // 顶点着色器：处理3D物体的顶点位置
             vertex: `
                 varying vec2 vUv;
                 void main() {
@@ -111,6 +130,7 @@ GITS/
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
             `,
+            // 片段着色器：处理物体表面的颜色和效果
             fragment: `
                 uniform float time;
                 uniform vec3 color1;
@@ -125,6 +145,7 @@ GITS/
             `
         };
 
+        // 创建材质函数
         const createFaceMaterial = (color1, color2) => {
             return new THREE.ShaderMaterial({
                 uniforms: {
@@ -139,6 +160,7 @@ GITS/
             });
         };
 
+        // 定义立方体各个面的颜色
         const colors = [
             ['#6366F1', '#A855F7'],
             ['#8B5CF6', '#D946EF'],
@@ -148,6 +170,7 @@ GITS/
             ['#A855F7', '#3B82F6']
         ];
 
+        // 创建立方体并添加到场景
         const cube = new THREE.Mesh(
             new THREE.BoxGeometry(20, 20, 20),
             colors.map(([c1, c2]) => createFaceMaterial(c1, c2))
@@ -155,10 +178,12 @@ GITS/
         scene.add(cube);
         camera.position.z = 50;
 
+        // 动画循环函数
         const animate = () => {
             requestAnimationFrame(animate);
             const time = performance.now() * 0.001;
             
+            // 更新立方体的动画效果
             cube.material.forEach(material => material.uniforms.time.value = time);
             cube.rotation.x = time * 0.2;
             cube.rotation.y = time * 0.3;
@@ -168,12 +193,14 @@ GITS/
             renderer.render(scene, camera);
         };
 
+        // 窗口大小调整处理函数
         const onResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
+        // 检查元素可见性的函数
         const checkVisibility = () => {
             document.querySelectorAll('.section').forEach(section => {
                 const rect = section.getBoundingClientRect();
@@ -183,6 +210,7 @@ GITS/
             });
         };
 
+        // 视差效果处理函数
         const handleParallax = (e) => {
             const header = document.querySelector('header');
             const xAxis = Math.max(-2, Math.min(2, (window.innerWidth / 2 - e.pageX) / 15));
@@ -190,14 +218,14 @@ GITS/
             header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         };
 
+        // 添加事件监听器
         window.addEventListener('resize', onResize);
         document.addEventListener('mousemove', handleParallax);
         document.addEventListener('DOMContentLoaded', checkVisibility);
         window.addEventListener('scroll', checkVisibility);
 
+        // 启动动画
         animate();
-
-
     </script>
 </body>
 </html>
