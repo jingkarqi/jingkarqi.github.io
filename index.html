@@ -1,290 +1,66 @@
 <!DOCTYPE html>
-<!-- 网站基础结构 -->
-<!-- 这是HTML5文档类型声明，确保浏览器以标准模式渲染 -->
-<!-- 页面基础结构开始 -->
-<html lang="zh-CN">
+<!-- HTML5文档类型声明，告诉浏览器这是一个HTML5文档，使其以最新的标准渲染页面 -->
+<html lang="zh-CN" data-theme="dark">
+<!-- lang="zh-CN"设置网页的主要语言为中文，data-theme="dark"用于控制网页的暗色主题 -->
+
 <head>
+    <!-- head标签包含页面的元数据，如标题、字符集、样式表等，这些信息不会直接显示在页面上 -->
     <meta charset="UTF-8">
-    <!-- 设置字符编码为UTF-8，支持中文显示 -->
+    <!-- 设置网页字符编码为UTF-8，确保正确显示中文等特殊字符 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- viewport元标签用于控制页面在移动设备上的显示，使页面宽度适应设备宽度，初始缩放比例为1.0 -->
     <meta name="description" content="jjq的个人网站 - 分享项目、想法和经验">
+    <!-- description元标签用于设置网页的描述，有助于SEO优化 -->
     <meta name="keywords" content="jjq, GitHub Pages, 个人网站, 项目展示">
+    <!-- keywords元标签设置网页的关键词，用于搜索引擎优化 -->
     <meta name="author" content="jjq">
+    <!-- author元标签指定网页的作者 -->
+    
     <title>Welcome to My GitHub Pages</title>
+    <!-- title标签设置网页标题，会显示在浏览器标签页上 -->
+    
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
+    <!-- 设置网页图标（favicon）为一个内嵌的SVG表情符号 -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- 引入animate.css库，用于添加页面动画效果 -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        :root {
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --header-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: rgba(0, 0, 0, 0.2);
-            --primary-color: #8b5cf6;
-            --hover-color: #4f46e5;
-            --background-color: #000;
-            --text-color: #fff;
-        }
-
-        [data-theme="dark"] {
-            --background-color: #000;
-            --text-color: #fff;
-        }
-
-        [data-theme="light"] {
-            --background-color: #fff;
-            --text-color: #000;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background: var(--background-color);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            perspective: 1000px;
-        }
-
-        #background-card {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .glass-effect {
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px var(--glass-shadow);
-        }
-
-        .compact-header {
-            max-width: 1150px;
-            margin: 0 auto;
-            padding: 2rem 1rem !important;
-            border-radius: 12px;
-        }
-
-        header {
-            text-align: center;
-            padding: 4rem 0;
-            margin-bottom: 2rem;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            border: 2px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 0.5rem 1.5rem;
-            display: inline-block;
-            transform-style: preserve-3d;
-            transition: all 0.3s ease;
-            position: relative;
-            box-shadow: 0 8px 16px var(--glass-shadow);
-        }
-
-        h1:hover {
-            transform: translateY(-5px) rotateX(10deg);
-            box-shadow: 0 12px 24px var(--glass-shadow);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .subtitle { font-size: 1.2rem; opacity: 0.9; }
-
-        .content { border-radius: 16px; padding: 2rem; }
-
-        .section {
-            margin-bottom: 2rem;
-            border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .section:nth-child(1) { transition-delay: 0s; }
-        .section:nth-child(2) { transition-delay: 0s; }
-        .section:nth-child(3) { transition-delay: 0s; }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px) rotateX(10deg) scale(1.02);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-        }
-
-        p { margin-bottom: 1rem; }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .social-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background: var(--hover-color);
-            transform: translateY(-2px);
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .nav-link {
-            color: #fff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .nav-link:hover {
-            background: var(--hover-color);
-            transform: translateY(-2px);
-            border-color: var(--glass-border);
-        }
-
-        .nav-link.active {
-            background: var(--primary-color);
-            font-weight: bold;
-            box-shadow: 0 0 10px var(--primary-color);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .nav-link {
-                width: 100%;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            header { padding: 2rem 0; }
-            h1 { font-size: 2rem; }
-        }
-
-        .project-detail {
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .project-detail h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.2rem;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 1rem;
-        }
-
-        .project-detail pre {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-        }
-
-        .project-detail code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: #8b5cf6;
-        }
-
-        .project-detail ul {
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-
-        .project-detail li {
-            margin-bottom: 0.8rem;
-            position: relative;
-        }
-
-        .project-detail li::before {
-            content: '▶';
-            color: var(--primary-color);
-            position: absolute;
-            left: -1.2rem;
-        }
-
-        #theme-toggle {
-            font-size: 2rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            transition: transform 0.3s ease;
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-        }
-    </style>
+    <!-- 引入Three.js库，用于创建3D图形效果 -->
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- 引入自定义样式表 -->
 </head>
+
 <body>
+    <!-- body标签包含页面的主要内容，这些内容会显示在浏览器窗口中 -->
+    
     <div id="background-card"></div>
+    <!-- 用于放置Three.js渲染的3D背景 -->
+    
     <header class="glass-effect compact-header">
+        <!-- 页面头部，使用玻璃效果样式 -->
         <div class="container">
             <h1>Welcome to My GitHub Pages</h1>
             <h1>欢迎来到我的 GitHub Pages</h1>
             <div class="subtitle">A Personal Website Built with GitHub Pages</div>
             <nav class="nav-links">
+                <!-- 导航菜单 -->
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="projects.html" class="nav-link">Projects</a>
             </nav>
         </div>
     </header>
-    <button id="theme-toggle">☀️</button> <!-- 添加主题切换按钮 -->
+
+    <button id="theme-toggle">☀️</button>
+    <!-- 主题切换按钮，用于切换明暗主题 -->
+
     <div class="container">
         <div class="content glass-effect">
+            <!-- 主要内容区域，应用玻璃效果 -->
+            
             <section class="section glass-effect">
+                <!-- About Me部分 -->
                 <h2>About Me</h2>
                 <p>我是jjq</p>
                 <p>Hello! Welcome to my personal website. This site is built using GitHub Pages and serves as a platform to share my projects, thoughts, and experiences.</p>
@@ -292,32 +68,49 @@
             </section>
 
             <section class="section glass-effect">
+                <!-- Projects部分 -->
                 <h2>Projects</h2>
                 <p>Here you'll find some of my featured projects and contributions. Stay tuned as I add more content!</p>
                 <p>在这里，你可以找到一些我精选的项目和贡献。敬请期待，我会不断添加更多内容！</p>
             </section>
 
             <section class="section glass-effect">
+                <!-- Contact部分 -->
                 <h2>Contact</h2>
                 <p>Feel free to reach out to me through any of the following platforms:</p>
                 <p>你可以通过以下任何平台与我联系：</p>
 
                 <div class="social-links">
+                    <!-- 社交链接 -->
                     <a href="https://github.com/jingkarqi" target="_blank" class="glass-effect">GitHub</a>
                     <a href="mailto:SoraET2005@outlook.com" class="glass-effect">outlook</a>
                 </div>
             </section>
         </div>
     </div>
+
+    <!-- 引入外部JavaScript文件 -->
+    <script src="assets/js/background-animation.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
+    <script src="assets/js/content-animation.js"></script>
+    
     <script>
-        // 初始化Three.js场景、相机和渲染器
+        // Three.js 3D背景动画相关代码
+        
+        // 创建Three.js的基本组件：场景、相机和渲染器
         const scene = new THREE.Scene();
+        // 创建透视相机，参数分别是：视野角度、宽高比、近裁剪面、远裁剪面
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // 创建WebGL渲染器，启用抗锯齿和透明背景
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        // 设置渲染器尺寸为窗口大小
         renderer.setSize(window.innerWidth, window.innerHeight);
+        // 将渲染器的画布添加到页面中
         document.getElementById('background-card').appendChild(renderer.domElement);
 
+        // 定义着色器代码
         const shaderCode = {
+            // 顶点着色器：处理每个顶点的位置
             vertex: `
                 varying vec2 vUv;
                 void main() {
@@ -325,6 +118,7 @@
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
             `,
+            // 片段着色器：处理每个像素的颜色
             fragment: `
                 uniform float time;
                 uniform vec3 color1;
@@ -339,6 +133,7 @@
             `
         };
 
+        // 创建材质的工厂函数
         const createFaceMaterial = (color1, color2) => {
             return new THREE.ShaderMaterial({
                 uniforms: {
@@ -353,6 +148,7 @@
             });
         };
 
+        // 定义立方体每个面的颜色
         const colors = [
             ['#6366F1', '#A855F7'],
             ['#8B5CF6', '#D946EF'],
@@ -362,32 +158,45 @@
             ['#A855F7', '#3B82F6']
         ];
 
+        // 创建立方体网格
         const cube = new THREE.Mesh(
             new THREE.BoxGeometry(20, 20, 20),
             colors.map(([c1, c2]) => createFaceMaterial(c1, c2))
         );
+        // 将立方体添加到场景中
         scene.add(cube);
+        // 设置相机位置
         camera.position.z = 50;
 
+        // 动画循环函数
         const animate = () => {
+            // 请求下一帧动画
             requestAnimationFrame(animate);
             const time = performance.now() * 0.001;
             
+            // 更新所有材质的时间uniform
             cube.material.forEach(material => material.uniforms.time.value = time);
+            // 设置立方体的旋转
             cube.rotation.x = time * 0.2;
             cube.rotation.y = time * 0.3;
             cube.rotation.z = Math.sin(time * 0.1) * 0.2;
+            // 设置立方体的位置动画
             cube.position.z = Math.sin(time * 0.2) * 3;
 
+            // 渲染场景
             renderer.render(scene, camera);
         };
 
+        // 窗口大小改变时的处理函数
         const onResize = () => {
+            // 更新相机宽高比
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+            // 更新渲染器尺寸
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
+        // 检查元素是否在视口中的函数
         const checkVisibility = () => {
             document.querySelectorAll('.section').forEach(section => {
                 const rect = section.getBoundingClientRect();
@@ -397,24 +206,30 @@
             });
         };
 
+        // 处理视差效果的函数
         const handleParallax = (e) => {
             const header = document.querySelector('header');
+            // 计算鼠标位置相对于窗口中心的偏移，并转换为旋转角度
             const xAxis = Math.max(-2, Math.min(2, (window.innerWidth / 2 - e.pageX) / 15));
             const yAxis = Math.max(-2, Math.min(2, (window.innerHeight / 2 - e.pageY) / 15));
+            // 应用旋转变换
             header.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         };
 
+        // 添加事件监听器
         window.addEventListener('resize', onResize);
         document.addEventListener('mousemove', handleParallax);
         document.addEventListener('DOMContentLoaded', checkVisibility);
         window.addEventListener('scroll', checkVisibility);
 
+        // 启动动画循环
         animate();
 
         // 初始化内容动画
         const initContentAnimation = () => {
             const sections = document.querySelectorAll('.section');
             
+            // 检查各个section是否可见
             const checkVisibility = () => {
                 sections.forEach(section => {
                     const sectionTop = section.getBoundingClientRect().top;
@@ -424,40 +239,18 @@
                 });
             };
 
+            // 添加滚动和调整窗口大小的事件监听器
             window.addEventListener('scroll', checkVisibility);
             window.addEventListener('resize', checkVisibility);
             
+            // 初始检查可见性
             checkVisibility();
         };
 
+        // 如果页面中存在section元素，则初始化内容动画
         if(document.querySelector('.section')) {
             initContentAnimation();
         }
-
-        // 添加主题切换逻辑
-        const toggleTheme = () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            // 更新按钮图标
-            const themeToggleButton = document.getElementById('theme-toggle');
-            themeToggleButton.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-
-
-        };
-
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-
-        // 加载保存的主题
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        // 初始化按钮图标
-        const themeToggleButton = document.getElementById('theme-toggle');
-        themeToggleButton.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-
     </script>
 </body>
 </html>

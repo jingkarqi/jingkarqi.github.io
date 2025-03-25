@@ -1,3 +1,4 @@
+// 初始化内容动画
 const initContentAnimation = () => {
     const sections = document.querySelectorAll('.section');
     
@@ -13,11 +14,9 @@ const initContentAnimation = () => {
     window.addEventListener('scroll', checkVisibility);
     window.addEventListener('resize', checkVisibility);
     
-    // 初始检查
     checkVisibility();
 };
 
-// 初始化内容动画
 if(document.querySelector('.section')) {
     initContentAnimation();
 }
