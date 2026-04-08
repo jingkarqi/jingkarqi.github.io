@@ -13,6 +13,7 @@ const { title, description } = Astro.props;
 const pageTitle = title ? `${title} | ${site.title}` : `${site.title} | ${site.hero.title}`;
 const pageDescription = description ?? site.description;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -25,6 +26,12 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <meta name="generator" content={Astro.generator} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
@@ -34,7 +41,7 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
     <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
   </head>
-  <body>
+  <body class:list={["site-body", { "is-home": isHome }]}>
     <Header />
     <main class="page-shell">
       <slot />

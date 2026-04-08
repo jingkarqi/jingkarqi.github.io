@@ -4,13 +4,15 @@ interface Props {
   description?: string;
   linkHref?: string;
   linkLabel?: string;
+  eyebrow?: string;
 }
 
-const { title, description, linkHref, linkLabel } = Astro.props;
+const { title, description, linkHref, linkLabel, eyebrow } = Astro.props;
 ---
 
 <div class="section-header">
   <div>
+    {eyebrow && <p class="section-eyebrow">{eyebrow}</p>}
     <h2>{title}</h2>
     {description && <p>{description}</p>}
   </div>

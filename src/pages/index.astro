@@ -21,63 +21,120 @@ const methods = (await getCollection("methods"))
 ---
 
 <BaseLayout>
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div id="cursor-glow" aria-hidden="true"></div>
+
   <Hero />
 
-  <section class="container section">
+  <section id="projects" class="container section homepage-section">
     <SectionTitle
-      title="代表项目"
-      description="首页只放我认为最能代表当前工作方向的项目，不做仓库罗列。"
+      eyebrow="Projects"
+      title="精选项目"
+      description="先看代表项目，再决定要不要继续读方法和文章。这一层是首页最直接的能力证明。"
       linkHref="/projects"
       linkLabel="查看全部项目"
     />
-    <div class="card-grid">
+    <div class="card-grid featured-project-grid">
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
 
-  <section class="container section">
-    <SectionTitle
-      title="方法与思考"
-      description="把项目里反复出现的判断标准和设计原则沉淀成长期有效的页面。"
-      linkHref="/methods"
-      linkLabel="查看方法页"
-    />
-    <div class="post-grid">
-      {
-        methods.map((entry) => (
-          <PostCard
-            href={`/methods/${entry.id}/`}
-            title={entry.data.title}
-            description={entry.data.description}
-            publishDate={entry.data.publishDate}
-            tags={entry.data.tags}
-            kind="方法"
-          />
-        ))
-      }
+  <section class="container section homepage-section">
+    <div class="latest-writing-shell">
+      <div class="glass split-panel reveal">
+        <SectionTitle
+          eyebrow="Methods"
+          title="方法与思考"
+          description="把项目里反复出现的判断标准和设计原则沉淀成长期有效的页面。"
+          linkHref="/methods"
+          linkLabel="查看方法页"
+        />
+        <div class="post-grid split-post-grid">
+          {
+            methods.map((entry) => (
+              <PostCard
+                href={`/methods/${entry.id}/`}
+                title={entry.data.title}
+                description={entry.data.description}
+                publishDate={entry.data.publishDate}
+                tags={entry.data.tags}
+                kind="方法"
+              />
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="glass split-panel reveal">
+        <SectionTitle
+          eyebrow="Writing"
+          title="最近更新"
+          description="博客主要记录项目复盘、AI 工具工作流以及具体实现中的工程判断。"
+          linkHref="/blog"
+          linkLabel="进入博客"
+        />
+        <div class="post-grid split-post-grid">
+          {
+            blogPosts.map((entry) => (
+              <PostCard
+                href={`/blog/${entry.id}/`}
+                title={entry.data.title}
+                description={entry.data.description}
+                publishDate={entry.data.publishDate}
+                tags={entry.data.tags}
+                kind="博客"
+              />
+            ))
+          }
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="container section">
-    <SectionTitle
-      title="最近更新"
-      description="博客主要记录项目复盘、AI 工具工作流以及具体实现中的工程判断。"
-      linkHref="/blog"
-      linkLabel="进入博客"
-    />
-    <div class="post-grid">
-      {
-        blogPosts.map((entry) => (
-          <PostCard
-            href={`/blog/${entry.id}/`}
-            title={entry.data.title}
-            description={entry.data.description}
-            publishDate={entry.data.publishDate}
-            tags={entry.data.tags}
-            kind="博客"
-          />
-        ))
-      }
+  <section id="about" class="container section homepage-section">
+    <div class="glass about-preview reveal">
+      <div class="about-preview-copy">
+        <p class="section-eyebrow">About</p>
+        <h2>这不是项目清单页，而是一张持续更新的工作首页。</h2>
+        <p>
+          我更关心工具是否真的进入长期使用，而不是只做出能演示的功能。这个站点同时承载项目、博客和方法页，用来保留那些可以被复用的判断过程。
+        </p>
+      </div>
+      <div class="about-preview-meta">
+        <span class="hero-tag">项目</span>
+        <span class="hero-tag">博客</span>
+        <span class="hero-tag">方法页</span>
+        <a class="button button-secondary" href="/about">查看完整关于</a>
+      </div>
     </div>
   </section>
+
+  <script is:inline>
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    revealElements.forEach((element) => revealObserver.observe(element));
+
+    const glow = document.getElementById("cursor-glow");
+    if (glow) {
+      document.addEventListener("mousemove", (event) => {
+        glow.style.left = `${event.clientX}px`;
+        glow.style.top = `${event.clientY}px`;
+      });
+    }
+  </script>
 </BaseLayout>

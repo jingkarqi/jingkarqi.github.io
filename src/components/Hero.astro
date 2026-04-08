@@ -2,18 +2,28 @@
 import { site } from "../config/site";
 ---
 
-<section class="container hero">
-  <div class="hero-panel">
+<section id="home" class="container hero">
+  <div class="glass hero-panel reveal active-on-load">
     <p class="eyebrow">{site.hero.badge}</p>
-    <h1>{site.hero.title}</h1>
+    <h1>
+      把方法论与博客输出
+      <br />
+      <span class="text-gradient">做成可复用的工作资产</span>
+    </h1>
     <p class="hero-copy">{site.hero.summary}</p>
     <div class="hero-actions">
-      <a class="button button-primary" href="/projects">看代表项目</a>
+      <a class="button button-primary" href="/projects">先看精选项目</a>
       <a class="button button-secondary" href="/blog">读最近文章</a>
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag">持续输出</span>
+      <span class="hero-tag">项目复盘</span>
+      <span class="hero-tag">方法沉淀</span>
     </div>
   </div>
 
-  <div class="focus-list">
+  <div class="glass focus-list reveal active-on-load">
+    <p class="focus-heading">我现在重点在做</p>
     {
       site.hero.focus.map((item) => (
         <div class="focus-item">

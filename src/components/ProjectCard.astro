@@ -14,13 +14,18 @@ const statusMap = {
   stable: "稳定可用",
   archived: "阶段归档",
 } as const;
+
+const projectBadge = String(project.data.order).padStart(2, "0");
 ---
 
-<article class="card">
+<article class="glass card project-card reveal">
   <div>
+    <div class="project-card-top">
+      <div class="project-emblem">{projectBadge}</div>
+      <span class:list={["status-pill", project.data.status]}>{statusMap[project.data.status]}</span>
+    </div>
     <div class="meta-row">
       <span class="pill">{typeLabel}</span>
-      <span class:list={["status-pill", project.data.status]}>{statusMap[project.data.status]}</span>
     </div>
     <h3><a href={`/projects/${project.id}/`}>{project.data.title}</a></h3>
     <p>{project.data.summary}</p>
@@ -29,7 +34,7 @@ const statusMap = {
     </div>
   </div>
   <div class="card-actions">
-    <a class="button button-primary" href={`/projects/${project.id}/`}>项目详情</a>
+    <a class="button button-primary" href={`/projects/${project.id}/`}>查看项目</a>
     <a class="button button-secondary" href={project.data.repoUrl} target="_blank" rel="noreferrer">
       GitHub
     </a>

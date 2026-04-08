@@ -18,7 +18,7 @@ const dateLabel = publishDate.toLocaleDateString("zh-CN", {
 });
 ---
 
-<article class="card post-card">
+<article class="glass card post-card reveal">
   <div>
     <div class="post-card-header">
       <span class="post-type">{kind}</span>
@@ -29,6 +29,6 @@ const dateLabel = publishDate.toLocaleDateString("zh-CN", {
     <TagList tags={tags} />
   </div>
   <div class="card-actions">
-    <a class="button button-secondary" href={href}>阅读全文</a>
+    <a class="button button-secondary" href={href}>继续阅读</a>
   </div>
 </article>
