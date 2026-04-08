@@ -18,8 +18,9 @@ const statusMap = {
 const projectBadge = String(project.data.order).padStart(2, "0");
 ---
 
-<article class="glass card project-card reveal">
-  <div>
+<article class="glass card project-card reveal hover-sheen">
+  <div class="card-gloss" aria-hidden="true"></div>
+  <div class="project-card-content">
     <div class="project-card-top">
       <div class="project-emblem">{projectBadge}</div>
       <span class:list={["status-pill", project.data.status]}>{statusMap[project.data.status]}</span>

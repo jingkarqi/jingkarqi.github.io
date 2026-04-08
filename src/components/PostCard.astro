@@ -18,8 +18,9 @@ const dateLabel = publishDate.toLocaleDateString("zh-CN", {
 });
 ---
 
-<article class="glass card post-card reveal">
-  <div>
+<article class="glass card post-card reveal hover-sheen">
+  <div class="card-gloss" aria-hidden="true"></div>
+  <div class="post-card-content">
     <div class="post-card-header">
       <span class="post-type">{kind}</span>
       <span class="date-label">{dateLabel}</span>

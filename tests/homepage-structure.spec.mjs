@@ -1,6 +1,16 @@
 import { readFileSync } from "node:fs";
 
-const source = readFileSync(new URL("../src/pages/index.astro", import.meta.url), "utf8");
+const files = [
+  "../src/pages/index.astro",
+  "../src/components/Hero.astro",
+  "../src/components/ProjectCard.astro",
+  "../src/components/PostCard.astro",
+  "../src/styles/global.css",
+];
+
+const source = files
+  .map((path) => readFileSync(new URL(path, import.meta.url), "utf8"))
+  .join("\n");
 
 const requiredTokens = [
   "精选项目",
@@ -10,6 +20,10 @@ const requiredTokens = [
   "cursor-glow",
   "featured-project-grid",
   "latest-writing-shell",
+  "hero-parallax",
+  "motion-stage",
+  "card-gloss",
+  "hover-sheen",
 ];
 
 for (const token of requiredTokens) {

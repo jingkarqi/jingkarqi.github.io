@@ -109,7 +109,7 @@ hr {
   filter: blur(90px);
   opacity: 0.75;
   border-radius: 50%;
-  animation: float 12s infinite ease-in-out alternate;
+  animation: float 18s infinite ease-in-out alternate;
 }
 
 .blob-1 {
@@ -126,7 +126,7 @@ hr {
   width: 40vw;
   height: 40vw;
   background: #fae8ff;
-  animation-delay: -5s;
+  animation-delay: -6s;
 }
 
 .blob-3 {
@@ -135,7 +135,7 @@ hr {
   width: 26vw;
   height: 26vw;
   background: #e0e7ff;
-  animation-duration: 16s;
+  animation-duration: 24s;
 }
 
 #cursor-glow {
@@ -149,6 +149,8 @@ hr {
   pointer-events: none;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 72%);
+  opacity: 0.9;
+  will-change: transform, left, top;
 }
 
 @keyframes float {
@@ -307,6 +309,14 @@ hr {
   color: var(--text-light);
 }
 
+.motion-stage {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(18px);
+  animation: stage-enter 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--stage-delay, 0ms);
+}
+
 .hero-actions,
 .card-actions,
 .detail-actions,
@@ -426,18 +436,26 @@ hr {
 .prose,
 .sidebar-card {
   padding: 28px;
+  position: relative;
+  overflow: hidden;
 }
 
 .project-card,
 .post-card {
-  transition: transform 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.45s ease,
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
 }
 
 .project-card:hover,
 .post-card:hover,
 .about-preview:hover {
-  transform: translateY(-8px);
+  transform: translateY(-10px);
   background: var(--glass-bg-strong);
+  border-color: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 46px rgba(15, 23, 42, 0.1);
 }
 
 .project-card-top,
@@ -456,6 +474,43 @@ hr {
 .project-card-top {
   justify-content: space-between;
   margin-bottom: 0.9rem;
+}
+
+.project-card-content,
+.post-card-content {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover .project-card-content,
+.post-card:hover .post-card-content {
+  transform: translateY(-3px);
+}
+
+.card-gloss {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 15%,
+      rgba(255, 255, 255, 0.28) 42%,
+      rgba(255, 255, 255, 0.12) 55%,
+      rgba(255, 255, 255, 0) 72%
+    );
+  transform: translateX(-38%) rotate(12deg);
+  transition:
+    opacity 0.55s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-sheen:hover .card-gloss {
+  opacity: 1;
+  transform: translateX(34%) rotate(12deg);
 }
 
 .project-emblem {
@@ -667,14 +722,38 @@ hr {
 
 .reveal {
   opacity: 0;
-  transform: translateY(48px) scale(0.98);
-  transition: all 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
+  filter: blur(8px);
+  transform: translateY(32px) scale(0.992);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal.active,
 .reveal.active-on-load {
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0) scale(1);
+}
+
+.hero-parallax {
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes stage-enter {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 }
 
 .sr-only {
@@ -722,6 +801,11 @@ hr {
   .detail-intro h1 {
     font-size: clamp(2.2rem, 11vw, 3.3rem);
   }
+
+  #cursor-glow {
+    width: 220px;
+    height: 220px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -737,5 +821,23 @@ hr {
   .sidebar-card,
   .focus-list {
     padding: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .motion-stage {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
 }

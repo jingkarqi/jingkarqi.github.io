@@ -31,13 +31,15 @@ const methods = (await getCollection("methods"))
   <Hero />
 
   <section id="projects" class="container section homepage-section">
-    <SectionTitle
-      eyebrow="Projects"
-      title="精选项目"
-      description="先看代表项目，再决定要不要继续读方法和文章。这一层是首页最直接的能力证明。"
-      linkHref="/projects"
-      linkLabel="查看全部项目"
-    />
+    <div class="reveal">
+      <SectionTitle
+        eyebrow="Projects"
+        title="精选项目"
+        description="先看代表项目，再决定要不要继续读方法和文章。这一层是首页最直接的能力证明。"
+        linkHref="/projects"
+        linkLabel="查看全部项目"
+      />
+    </div>
     <div class="card-grid featured-project-grid">
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
@@ -46,13 +48,15 @@ const methods = (await getCollection("methods"))
   <section class="container section homepage-section">
     <div class="latest-writing-shell">
       <div class="glass split-panel reveal">
-        <SectionTitle
-          eyebrow="Methods"
-          title="方法与思考"
-          description="把项目里反复出现的判断标准和设计原则沉淀成长期有效的页面。"
-          linkHref="/methods"
-          linkLabel="查看方法页"
-        />
+        <div class="reveal active-on-loadless">
+          <SectionTitle
+            eyebrow="Methods"
+            title="方法与思考"
+            description="把项目里反复出现的判断标准和设计原则沉淀成长期有效的页面。"
+            linkHref="/methods"
+            linkLabel="查看方法页"
+          />
+        </div>
         <div class="post-grid split-post-grid">
           {
             methods.map((entry) => (
@@ -70,13 +74,15 @@ const methods = (await getCollection("methods"))
       </div>
 
       <div class="glass split-panel reveal">
-        <SectionTitle
-          eyebrow="Writing"
-          title="最近更新"
-          description="博客主要记录项目复盘、AI 工具工作流以及具体实现中的工程判断。"
-          linkHref="/blog"
-          linkLabel="进入博客"
-        />
+        <div class="reveal active-on-loadless">
+          <SectionTitle
+            eyebrow="Writing"
+            title="最近更新"
+            description="博客主要记录项目复盘、AI 工具工作流以及具体实现中的工程判断。"
+            linkHref="/blog"
+            linkLabel="进入博客"
+          />
+        </div>
         <div class="post-grid split-post-grid">
           {
             blogPosts.map((entry) => (
@@ -131,10 +137,50 @@ const methods = (await getCollection("methods"))
 
     const glow = document.getElementById("cursor-glow");
     if (glow) {
+      let glowX = window.innerWidth / 2;
+      let glowY = window.innerHeight / 2;
+      let targetX = glowX;
+      let targetY = glowY;
+
       document.addEventListener("mousemove", (event) => {
-        glow.style.left = `${event.clientX}px`;
-        glow.style.top = `${event.clientY}px`;
+        targetX = event.clientX;
+        targetY = event.clientY;
       });
+
+      const tick = () => {
+        glowX += (targetX - glowX) * 0.1;
+        glowY += (targetY - glowY) * 0.1;
+        glow.style.left = `${glowX}px`;
+        glow.style.top = `${glowY}px`;
+        window.requestAnimationFrame(tick);
+      };
+
+      window.requestAnimationFrame(tick);
+    }
+
+    const parallaxElements = document.querySelectorAll(".hero-parallax");
+    if (parallaxElements.length > 0) {
+      const moveParallax = (event) => {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const offsetX = (event.clientX - centerX) / centerX;
+        const offsetY = (event.clientY - centerY) / centerY;
+
+        parallaxElements.forEach((element) => {
+          const depth = Number(element.dataset.depth || 10);
+          element.style.transform =
+            `translate3d(${offsetX * depth}px, ${offsetY * depth}px, 0)`;
+        });
+      };
+
+      const resetParallax = () => {
+        parallaxElements.forEach((element) => {
+          element.style.transform = "translate3d(0, 0, 0)";
+        });
+      };
+
+      document.addEventListener("mousemove", moveParallax);
+      document.addEventListener("mouseleave", resetParallax);
     }
   </script>
 </BaseLayout>

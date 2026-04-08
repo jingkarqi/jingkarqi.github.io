@@ -3,32 +3,34 @@ import { site } from "../config/site";
 ---
 
 <section id="home" class="container hero">
-  <div class="glass hero-panel reveal active-on-load">
-    <p class="eyebrow">{site.hero.badge}</p>
-    <h1>
+  <div class="glass hero-panel reveal active-on-load hero-parallax" data-depth="10">
+    <p class="eyebrow motion-stage" style="--stage-delay: 60ms;">{site.hero.badge}</p>
+    <h1 class="motion-stage" style="--stage-delay: 140ms;">
       把方法论与博客输出
       <br />
       <span class="text-gradient">做成可复用的工作资产</span>
     </h1>
-    <p class="hero-copy">{site.hero.summary}</p>
-    <div class="hero-actions">
+    <p class="hero-copy motion-stage" style="--stage-delay: 220ms;">{site.hero.summary}</p>
+    <div class="hero-actions motion-stage" style="--stage-delay: 320ms;">
       <a class="button button-primary" href="/projects">先看精选项目</a>
       <a class="button button-secondary" href="/blog">读最近文章</a>
     </div>
-    <div class="hero-tags">
+    <div class="hero-tags motion-stage" style="--stage-delay: 420ms;">
       <span class="hero-tag">持续输出</span>
       <span class="hero-tag">项目复盘</span>
       <span class="hero-tag">方法沉淀</span>
     </div>
   </div>
 
-  <div class="glass focus-list reveal active-on-load">
-    <p class="focus-heading">我现在重点在做</p>
+  <div class="glass focus-list reveal active-on-load hero-parallax" data-depth="18">
+    <p class="focus-heading motion-stage" style="--stage-delay: 240ms;">我现在重点在做</p>
     {
-      site.hero.focus.map((item) => (
+      site.hero.focus.map((item, index) => (
         <div class="focus-item">
-          <strong>{item}</strong>
-          <span>围绕真实使用场景做产品化、流程化和长期维护。</span>
+          <strong class="motion-stage" style={`--stage-delay: ${320 + index * 90}ms;`}>{item}</strong>
+          <span class="motion-stage" style={`--stage-delay: ${380 + index * 90}ms;`}>
+            围绕真实使用场景做产品化、流程化和长期维护。
+          </span>
         </div>
       ))
     }
