@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const typeLabel =
+  entry.data.type === "original" ? "原创项目" : "开源改造 / 深度维护";
+
+const statusMap = {
+  active: "持续迭代",
+  stable: "稳定可用",
+  archived: "阶段归档",
+} as const;
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary}>
+  <article class="container detail-shell">
+    <section class="detail-intro">
+      <p class="eyebrow">{typeLabel}</p>
+      <h1>{entry.data.title}</h1>
+      <p class="lead">{entry.data.summary}</p>
+      <div class="detail-meta">
+        <span class="pill">{entry.data.publishDate.toLocaleDateString("zh-CN")}</span>
+        <span class:list={["status-pill", entry.data.status]}>{statusMap[entry.data.status]}</span>
+      </div>
+      <div class="project-tech">
+        {entry.data.tech.map((item) => <span class="tag">{item}</span>)}
+      </div>
+      <div class="detail-actions">
+        <a class="button button-primary" href={entry.data.repoUrl} target="_blank" rel="noreferrer">
+          查看 GitHub
+        </a>
+        {
+          entry.data.demoUrl && (
+            <a class="button button-secondary" href={entry.data.demoUrl} target="_blank" rel="noreferrer">
+              打开 Demo
+            </a>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="detail-grid">
+      <div class="prose">
+        <Content />
+      </div>
+      <aside class="sidebar-card">
+        <h3>项目视角</h3>
+        <ul class="simple-list">
+          <li>是否解决了一个真实且可复现的问题。</li>
+          <li>是否把能力组织成可持续维护的结构。</li>
+          <li>是否留下了可继续扩展的内容与工作流入口。</li>
+        </ul>
+      </aside>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import { site } from "../config/site";
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <div class="container nav-row">
+    <a class="brand" href="/">
+      <span class="brand-mark">JQ</span>
+      <span>{site.title}</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      {
+        site.nav.map((item) => (
+          <a
+            class:list={["nav-link", { active: isActive(item.href) }]}
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

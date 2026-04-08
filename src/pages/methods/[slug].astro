@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from "astro:content";
+import TagList from "../../components/TagList.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("methods");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const dateLabel = entry.data.publishDate.toLocaleDateString("zh-CN", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="container detail-shell">
+    <section class="detail-intro">
+      <p class="eyebrow">Method</p>
+      <h1>{entry.data.title}</h1>
+      <p class="lead">{entry.data.description}</p>
+      <div class="detail-meta">
+        <span class="pill">{dateLabel}</span>
+      </div>
+      <TagList tags={entry.data.tags} />
+    </section>
+
+    <section class="detail-grid">
+      <div class="prose">
+        <Content />
+      </div>
+      <aside class="sidebar-card">
+        <h3>阅读提示</h3>
+        <ul class="simple-list">
+          <li>这里优先写长期有效的原则，而不是短期技巧。</li>
+          <li>如果方法和项目冲突，我更相信真实使用反馈。</li>
+        </ul>
+      </aside>
+    </section>
+  </article>
+</BaseLayout>

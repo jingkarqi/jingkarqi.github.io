@@ -1,0 +1,44 @@
+---
+import { site } from "../config/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="关于" description="关于 jingkarqi 的工作方向、方法与联系方式。">
+  <section class="container list-shell">
+    <div class="page-intro">
+      <p class="eyebrow">About</p>
+      <h1 class="page-title">关于</h1>
+      <p>
+        我主要做两类事：把 AI 能力封装成更稳定的工具，以及把复杂工作流拆成可以复用的方法。
+      </p>
+    </div>
+
+    <div class="about-grid">
+      <div class="note-panel about-copy">
+        <h2>我在做什么</h2>
+        <p>
+          当前站点的主线是 <strong>AI 工具 / 智能体开发</strong>。我更关注工具是否真的能进入长期使用，
+          而不是只停留在演示层。
+        </p>
+        <ul>
+          <li>把模型能力包装成可执行的产品与插件。</li>
+          <li>把研究、写作和知识管理流程工具化。</li>
+          <li>把重复决策沉淀成技能、方法页和可维护的工程结构。</li>
+        </ul>
+      </div>
+
+      <div class="note-panel about-copy">
+        <h2>我怎么工作</h2>
+        <ul>
+          <li>优先验证真实使用场景，而不是先堆抽象能力。</li>
+          <li>能写成文档和方法的东西，就尽量不要只留在口头经验里。</li>
+          <li>在开源改造里看重结构化增量，而不是轻量改皮肤。</li>
+        </ul>
+        <div class="about-actions">
+          <a class="button button-primary" href={site.github} target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button button-secondary" href={`mailto:${site.email}`}>联系我</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

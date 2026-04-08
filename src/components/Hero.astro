@@ -1,0 +1,26 @@
+---
+import { site } from "../config/site";
+---
+
+<section class="container hero">
+  <div class="hero-panel">
+    <p class="eyebrow">{site.hero.badge}</p>
+    <h1>{site.hero.title}</h1>
+    <p class="hero-copy">{site.hero.summary}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/projects">看代表项目</a>
+      <a class="button button-secondary" href="/blog">读最近文章</a>
+    </div>
+  </div>
+
+  <div class="focus-list">
+    {
+      site.hero.focus.map((item) => (
+        <div class="focus-item">
+          <strong>{item}</strong>
+          <span>围绕真实使用场景做产品化、流程化和长期维护。</span>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "../../components/PostCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const methods = (await getCollection("methods")).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+---
+
+<BaseLayout title="方法" description="长期有效的智能体与 AI 工具方法页。">
+  <section class="container list-shell">
+    <div class="page-intro">
+      <p class="eyebrow">Methods</p>
+      <h1 class="page-title">方法</h1>
+      <p>
+        这些页面比博客更稳定，目标是沉淀可复用的设计原则、判断标准和工作方式。
+      </p>
+    </div>
+    <div class="post-grid">
+      {
+        methods.map((entry) => (
+          <PostCard
+            href={`/methods/${entry.id}/`}
+            title={entry.data.title}
+            description={entry.data.description}
+            publishDate={entry.data.publishDate}
+            tags={entry.data.tags}
+            kind="方法"
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

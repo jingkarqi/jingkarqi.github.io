@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "../../components/ProjectCard.astro";
+import SectionTitle from "../../components/SectionTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const allProjects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order || b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+
+const originalProjects = allProjects.filter((entry) => entry.data.type === "original");
+const contributionProjects = allProjects.filter(
+  (entry) => entry.data.type === "open-source-contribution",
+);
+---
+
+<BaseLayout title="项目" description="精选项目与开源改造案例。">
+  <section class="container list-shell">
+    <div class="page-intro">
+      <p class="eyebrow">Projects</p>
+      <h1 class="page-title">项目</h1>
+      <p>
+        这里不追求数量，而是优先展示能代表当前能力结构的项目。包括原创项目，也包括改造幅度足够大的开源维护案例。
+      </p>
+    </div>
+
+    <section class="section">
+      <SectionTitle
+        title="原创项目"
+        description="更直接反映我如何定义问题、落地能力和组织结构。"
+      />
+      <div class="card-grid">
+        {originalProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    <section class="section">
+      <SectionTitle
+        title="开源改造 / 深度维护"
+        description="重点展示结构化增量和产品化改造，而不是简单 fork。"
+      />
+      <div class="card-grid">
+        {contributionProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+  </section>
+</BaseLayout>

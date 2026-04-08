@@ -1,0 +1,34 @@
+---
+import TagList from "./TagList.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  publishDate: Date;
+  tags?: string[];
+  kind: "博客" | "方法";
+}
+
+const { href, title, description, publishDate, tags = [], kind } = Astro.props;
+const dateLabel = publishDate.toLocaleDateString("zh-CN", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<article class="card post-card">
+  <div>
+    <div class="post-card-header">
+      <span class="post-type">{kind}</span>
+      <span class="date-label">{dateLabel}</span>
+    </div>
+    <h3><a href={href}>{title}</a></h3>
+    <p>{description}</p>
+    <TagList tags={tags} />
+  </div>
+  <div class="card-actions">
+    <a class="button button-secondary" href={href}>阅读全文</a>
+  </div>
+</article>

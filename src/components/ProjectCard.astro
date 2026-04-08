@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+const typeLabel = project.data.type === "original" ? "原创项目" : "开源改造";
+
+const statusMap = {
+  active: "持续迭代",
+  stable: "稳定可用",
+  archived: "阶段归档",
+} as const;
+---
+
+<article class="card">
+  <div>
+    <div class="meta-row">
+      <span class="pill">{typeLabel}</span>
+      <span class:list={["status-pill", project.data.status]}>{statusMap[project.data.status]}</span>
+    </div>
+    <h3><a href={`/projects/${project.id}/`}>{project.data.title}</a></h3>
+    <p>{project.data.summary}</p>
+    <div class="meta-list">
+      {project.data.tech.map((item) => <span class="tag">{item}</span>)}
+    </div>
+  </div>
+  <div class="card-actions">
+    <a class="button button-primary" href={`/projects/${project.id}/`}>项目详情</a>
+    <a class="button button-secondary" href={project.data.repoUrl} target="_blank" rel="noreferrer">
+      GitHub
+    </a>
+  </div>
+</article>

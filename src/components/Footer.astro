@@ -1,0 +1,25 @@
+---
+import { site } from "../config/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="footer-title">{site.title}</p>
+      <p class="footer-copy">
+        AI 工具 / 智能体开发者。记录项目、方法与持续迭代中的判断标准。
+      </p>
+    </div>
+    <div class="footer-links">
+      <a href={site.github} target="_blank" rel="noreferrer">GitHub</a>
+      <a href={`mailto:${site.email}`}>邮箱</a>
+      <a href="/rss.xml">RSS</a>
+    </div>
+  </div>
+  <div class="container footer-meta">
+    <span>{year} © {site.title}</span>
+    <span>Built with Astro and GitHub Pages</span>
+  </div>
+</footer>

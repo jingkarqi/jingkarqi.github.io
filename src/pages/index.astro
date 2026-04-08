@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+import Hero from "../components/Hero.astro";
+import PostCard from "../components/PostCard.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const projects = (await getCollection("projects"))
+  .sort((a, b) => a.data.order - b.data.order || b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .filter((project) => project.data.featured);
+
+const blogPosts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+
+const methods = (await getCollection("methods"))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 2);
+---
+
+<BaseLayout>
+  <Hero />
+
+  <section class="container section">
+    <SectionTitle
+      title="代表项目"
+      description="首页只放我认为最能代表当前工作方向的项目，不做仓库罗列。"
+      linkHref="/projects"
+      linkLabel="查看全部项目"
+    />
+    <div class="card-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="container section">
+    <SectionTitle
+      title="方法与思考"
+      description="把项目里反复出现的判断标准和设计原则沉淀成长期有效的页面。"
+      linkHref="/methods"
+      linkLabel="查看方法页"
+    />
+    <div class="post-grid">
+      {
+        methods.map((entry) => (
+          <PostCard
+            href={`/methods/${entry.id}/`}
+            title={entry.data.title}
+            description={entry.data.description}
+            publishDate={entry.data.publishDate}
+            tags={entry.data.tags}
+            kind="方法"
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container section">
+    <SectionTitle
+      title="最近更新"
+      description="博客主要记录项目复盘、AI 工具工作流以及具体实现中的工程判断。"
+      linkHref="/blog"
+      linkLabel="进入博客"
+    />
+    <div class="post-grid">
+      {
+        blogPosts.map((entry) => (
+          <PostCard
+            href={`/blog/${entry.id}/`}
+            title={entry.data.title}
+            description={entry.data.description}
+            publishDate={entry.data.publishDate}
+            tags={entry.data.tags}
+            kind="博客"
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
