@@ -449,6 +449,23 @@ hr {
     border-color 0.45s ease;
 }
 
+.featured-project-grid .project-card,
+.split-post-grid .post-card {
+  animation: card-drift 11s ease-in-out infinite alternate;
+}
+
+.featured-project-grid .project-card:nth-child(2),
+.split-post-grid .post-card:nth-child(2) {
+  animation-duration: 13s;
+  animation-delay: -3.2s;
+}
+
+.featured-project-grid .project-card:nth-child(3),
+.split-post-grid .post-card:nth-child(3) {
+  animation-duration: 14.5s;
+  animation-delay: -6.4s;
+}
+
 .project-card:hover,
 .post-card:hover,
 .about-preview:hover {
@@ -742,6 +759,16 @@ hr {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@keyframes card-drift {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-7px);
+  }
+}
+
 @keyframes stage-enter {
   from {
     opacity: 0;
@@ -839,5 +866,10 @@ hr {
     opacity: 1 !important;
     filter: none !important;
     transform: none !important;
+  }
+
+  .featured-project-grid .project-card,
+  .split-post-grid .post-card {
+    animation: none !important;
   }
 }

@@ -24,6 +24,7 @@ const requiredTokens = [
   "motion-stage",
   "card-gloss",
   "hover-sheen",
+  "card-drift",
 ];
 
 for (const token of requiredTokens) {
