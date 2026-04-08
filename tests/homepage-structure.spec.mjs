@@ -25,11 +25,27 @@ const requiredTokens = [
   "card-gloss",
   "hover-sheen",
   "card-drift",
+  "accent-teal",
+  "text-ink",
+];
+
+const forbiddenTokens = [
+  "accent-purple",
+  "#8b5cf6",
+  "#fae8ff",
+  "#ede9fe",
+  "text-gradient",
 ];
 
 for (const token of requiredTokens) {
   if (!source.includes(token)) {
     throw new Error(`Missing homepage token: ${token}`);
+  }
+}
+
+for (const token of forbiddenTokens) {
+  if (source.includes(token)) {
+    throw new Error(`Forbidden homepage token still present: ${token}`);
   }
 }
 
