@@ -1,5 +1,6 @@
 ---
 import PostCard from "../../components/PostCard.astro";
+import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 interface TagEntry {
@@ -62,12 +63,23 @@ const { tag, entries } = Astro.props;
 
 <BaseLayout title={`标签：${tag}`} description={`和 ${tag} 相关的文章与方法页。`}>
   <section class="container list-shell">
-    <div class="page-intro">
-      <p class="eyebrow">Tag</p>
-      <h1 class="page-title">#{tag}</h1>
-      <p>和这个主题相关的内容集中在这里，便于按问题而不是按时间查找。</p>
-    </div>
-    <div class="post-grid">
+    <PageHero
+      eyebrow="Tag"
+      title={`#${tag}`}
+      description="和这个主题相关的内容集中在这里，便于按问题而不是按时间查找。"
+      railTitle="主题索引"
+      railItems={[
+        { label: "相关内容", value: `${entries.length} 条`, detail: "把博客和方法页按问题重新聚合。" },
+        { label: "覆盖范围", value: "博客 + 方法", detail: "优先从主题角度而不是时间角度浏览。" },
+        { label: "阅读方式", value: "按问题查找", detail: "适合回看某一类项目和方法的共通判断。" },
+      ]}
+    >
+      <Fragment slot="actions">
+        <a class="button button-primary" href="/blog">回到博客</a>
+        <a class="button button-secondary" href="/methods">看方法页</a>
+      </Fragment>
+    </PageHero>
+    <div class="catalog-grid post-grid">
       {
         entries.map((entry: TagEntry) => (
           <PostCard

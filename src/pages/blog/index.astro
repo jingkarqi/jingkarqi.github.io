@@ -1,23 +1,35 @@
 ---
 import { getCollection } from "astro:content";
+import PageHero from "../../components/PageHero.astro";
 import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const latestPostDate = posts[0]?.data.publishDate.toLocaleDateString("zh-CN") ?? "持续更新";
 ---
 
 <BaseLayout title="博客" description="项目复盘、AI 工具工作流与工程判断。">
   <section class="container list-shell">
-    <div class="page-intro">
-      <p class="eyebrow">Blog</p>
-      <h1 class="page-title">博客</h1>
-      <p>
-        这里记录项目复盘、工作流设计和实现细节。重点不是新闻流，而是把可复用的判断过程写下来。
-      </p>
-    </div>
-    <div class="post-grid">
+    <PageHero
+      eyebrow="Blog"
+      title="博客"
+      description="这里记录项目复盘、工作流设计和实现细节。重点不是新闻流，而是把可复用的判断过程写下来。"
+      railTitle="写作侧重点"
+      railItems={[
+        { label: "已发布文章", value: `${posts.length} 篇`, detail: "优先记录真实工程判断和复盘。" },
+        { label: "最近更新", value: latestPostDate, detail: "不是快讯，而是可复用的工作经验。" },
+        { label: "关注方向", value: "项目 / 工作流 / 工程", detail: "让文章和项目互相支撑，而不是割裂。" },
+      ]}
+    >
+      <Fragment slot="actions">
+        <a class="button button-primary" href="/projects">看精选项目</a>
+        <a class="button button-secondary" href="/methods">读方法页</a>
+      </Fragment>
+    </PageHero>
+    <div class="catalog-grid post-grid">
       {
         posts.map((entry) => (
           <PostCard

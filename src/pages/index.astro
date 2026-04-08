@@ -21,13 +21,6 @@ const methods = (await getCollection("methods"))
 ---
 
 <BaseLayout>
-  <div class="ambient-bg" aria-hidden="true">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
-  <div id="cursor-glow" aria-hidden="true"></div>
-
   <Hero />
 
   <section id="projects" class="container section homepage-section">
@@ -120,46 +113,10 @@ const methods = (await getCollection("methods"))
   </section>
 
   <script is:inline>
-    const revealElements = document.querySelectorAll(".reveal");
-
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
-    );
-
-    revealElements.forEach((element) => revealObserver.observe(element));
-
-    const glow = document.getElementById("cursor-glow");
-    if (glow) {
-      let glowX = window.innerWidth / 2;
-      let glowY = window.innerHeight / 2;
-      let targetX = glowX;
-      let targetY = glowY;
-
-      document.addEventListener("mousemove", (event) => {
-        targetX = event.clientX;
-        targetY = event.clientY;
-      });
-
-      const tick = () => {
-        glowX += (targetX - glowX) * 0.1;
-        glowY += (targetY - glowY) * 0.1;
-        glow.style.left = `${glowX}px`;
-        glow.style.top = `${glowY}px`;
-        window.requestAnimationFrame(tick);
-      };
-
-      window.requestAnimationFrame(tick);
-    }
-
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const parallaxElements = document.querySelectorAll(".hero-parallax");
-    if (parallaxElements.length > 0) {
+
+    if (parallaxElements.length > 0 && !motionQuery.matches) {
       const moveParallax = (event) => {
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;

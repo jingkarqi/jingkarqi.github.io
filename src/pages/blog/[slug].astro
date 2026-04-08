@@ -22,21 +22,41 @@ const dateLabel = entry.data.publishDate.toLocaleDateString("zh-CN", {
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
   <article class="container detail-shell">
-    <section class="detail-intro">
-      <p class="eyebrow">Blog</p>
-      <h1>{entry.data.title}</h1>
-      <p class="lead">{entry.data.description}</p>
-      <div class="detail-meta">
-        <span class="pill">{dateLabel}</span>
+    <section class="detail-hero-shell">
+      <div class="glass detail-intro reveal">
+        <p class="eyebrow">Blog</p>
+        <h1>{entry.data.title}</h1>
+        <p class="lead">{entry.data.description}</p>
+        <div class="detail-meta">
+          <span class="pill">{dateLabel}</span>
+        </div>
+        <TagList tags={entry.data.tags} />
       </div>
-      <TagList tags={entry.data.tags} />
+
+      <aside class="glass meta-card reveal">
+        <p class="meta-card-title">文章信息</p>
+        <ul class="page-rail-list">
+          <li class="page-rail-item">
+            <strong>{dateLabel}</strong>
+            <span>发布时间</span>
+          </li>
+          <li class="page-rail-item">
+            <strong>{entry.data.tags.length} 个标签</strong>
+            <span>用于和方法页、项目复盘建立主题连接</span>
+          </li>
+          <li class="page-rail-item">
+            <strong>工程复盘</strong>
+            <span>重点记录取舍、结构和长期维护判断</span>
+          </li>
+        </ul>
+      </aside>
     </section>
 
-    <section class="detail-grid">
-      <div class="prose">
+    <section class="detail-body-grid">
+      <div class="prose content-card reveal">
         <Content />
       </div>
-      <aside class="sidebar-card">
+      <aside class="glass sidebar-card meta-card reveal">
         <h3>这篇文章适合</h3>
         <ul class="simple-list">
           <li>想快速理解项目设计取舍的人。</li>

@@ -1,23 +1,35 @@
 ---
 import { getCollection } from "astro:content";
+import PageHero from "../../components/PageHero.astro";
 import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const methods = (await getCollection("methods")).sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
 );
+
+const latestMethodDate = methods[0]?.data.publishDate.toLocaleDateString("zh-CN") ?? "持续更新";
 ---
 
 <BaseLayout title="方法" description="长期有效的智能体与 AI 工具方法页。">
   <section class="container list-shell">
-    <div class="page-intro">
-      <p class="eyebrow">Methods</p>
-      <h1 class="page-title">方法</h1>
-      <p>
-        这些页面比博客更稳定，目标是沉淀可复用的设计原则、判断标准和工作方式。
-      </p>
-    </div>
-    <div class="post-grid">
+    <PageHero
+      eyebrow="Methods"
+      title="方法"
+      description="这些页面比博客更稳定，目标是沉淀可复用的设计原则、判断标准和工作方式。"
+      railTitle="方法页定位"
+      railItems={[
+        { label: "当前条目", value: `${methods.length} 篇`, detail: "只保留更长期有效的原则和框架。" },
+        { label: "最近更新", value: latestMethodDate, detail: "方法来自真实项目，而不是抽象口号。" },
+        { label: "核心用途", value: "复用判断", detail: "把重复决策沉淀成可以长期回看的页面。" },
+      ]}
+    >
+      <Fragment slot="actions">
+        <a class="button button-primary" href="/blog">看最近文章</a>
+        <a class="button button-secondary" href="/projects">回到项目</a>
+      </Fragment>
+    </PageHero>
+    <div class="catalog-grid post-grid">
       {
         methods.map((entry) => (
           <PostCard

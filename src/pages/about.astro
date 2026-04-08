@@ -1,20 +1,30 @@
 ---
 import { site } from "../config/site";
+import PageHero from "../components/PageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="关于" description="关于 jingkarqi 的工作方向、方法与联系方式。">
   <section class="container list-shell">
-    <div class="page-intro">
-      <p class="eyebrow">About</p>
-      <h1 class="page-title">关于</h1>
-      <p>
-        我主要做两类事：把 AI 能力封装成更稳定的工具，以及把复杂工作流拆成可以复用的方法。
-      </p>
-    </div>
+    <PageHero
+      eyebrow="About"
+      title="关于"
+      description="我主要做两类事：把 AI 能力封装成更稳定的工具，以及把复杂工作流拆成可以复用的方法。"
+      railTitle="我关心的事"
+      railItems={[
+        { label: "主线", value: "AI 工具 / 智能体", detail: "让模型能力进入真实使用，而不是停留在演示层。" },
+        { label: "方法", value: "工作流工具化", detail: "把复杂过程拆成可维护的结构和习惯。" },
+        { label: "输出", value: "项目 + 博客 + 方法", detail: "把判断过程留在可继续复用的主站里。" },
+      ]}
+    >
+      <Fragment slot="actions">
+        <a class="button button-primary" href={site.github} target="_blank" rel="noreferrer">GitHub</a>
+        <a class="button button-secondary" href={`mailto:${site.email}`}>联系我</a>
+      </Fragment>
+    </PageHero>
 
-    <div class="about-grid">
-      <div class="note-panel about-copy">
+    <div class="about-grid about-stack">
+      <div class="glass note-panel about-copy reveal">
         <h2>我在做什么</h2>
         <p>
           当前站点的主线是 <strong>AI 工具 / 智能体开发</strong>。我更关注工具是否真的能进入长期使用，
@@ -27,7 +37,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </ul>
       </div>
 
-      <div class="note-panel about-copy">
+      <div class="glass note-panel about-copy reveal">
         <h2>我怎么工作</h2>
         <ul>
           <li>优先验证真实使用场景，而不是先堆抽象能力。</li>

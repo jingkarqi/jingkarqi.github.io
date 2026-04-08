@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import PageHero from "../../components/PageHero.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import SectionTitle from "../../components/SectionTitle.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -12,24 +13,35 @@ const originalProjects = allProjects.filter((entry) => entry.data.type === "orig
 const contributionProjects = allProjects.filter(
   (entry) => entry.data.type === "open-source-contribution",
 );
+
+const latestProjectDate = allProjects[0]?.data.publishDate.toLocaleDateString("zh-CN") ?? "持续更新";
 ---
 
 <BaseLayout title="项目" description="精选项目与开源改造案例。">
   <section class="container list-shell">
-    <div class="page-intro">
-      <p class="eyebrow">Projects</p>
-      <h1 class="page-title">项目</h1>
-      <p>
-        这里不追求数量，而是优先展示能代表当前能力结构的项目。包括原创项目，也包括改造幅度足够大的开源维护案例。
-      </p>
-    </div>
+    <PageHero
+      eyebrow="Projects"
+      title="项目"
+      description="这里不追求数量，而是优先展示能代表当前能力结构的项目。包括原创项目，也包括改造幅度足够大的开源维护案例。"
+      railTitle="筛选原则"
+      railItems={[
+        { label: "已精选项目", value: `${allProjects.length} 个`, detail: "只保留能代表当前能力结构的项目。" },
+        { label: "原创项目", value: `${originalProjects.length} 个`, detail: "更直接体现定义问题和组织能力。" },
+        { label: "最近更新", value: latestProjectDate, detail: "持续以产品化标准整理和维护。" },
+      ]}
+    >
+      <Fragment slot="actions">
+        <a class="button button-primary" href="/blog">读项目复盘</a>
+        <a class="button button-secondary" href="/methods">看方法页</a>
+      </Fragment>
+    </PageHero>
 
     <section class="section">
       <SectionTitle
         title="原创项目"
         description="更直接反映我如何定义问题、落地能力和组织结构。"
       />
-      <div class="card-grid">
+      <div class="catalog-grid card-grid">
         {originalProjects.map((project) => <ProjectCard project={project} />)}
       </div>
     </section>
@@ -39,7 +51,7 @@ const contributionProjects = allProjects.filter(
         title="开源改造 / 深度维护"
         description="重点展示结构化增量和产品化改造，而不是简单 fork。"
       />
-      <div class="card-grid">
+      <div class="catalog-grid card-grid">
         {contributionProjects.map((project) => <ProjectCard project={project} />)}
       </div>
     </section>

@@ -1,0 +1,52 @@
+---
+interface RailItem {
+  label: string;
+  value: string;
+  detail?: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  railTitle: string;
+  railItems?: RailItem[];
+}
+
+const { eyebrow, title, description, railTitle, railItems = [] } = Astro.props;
+const hasActions = Astro.slots.has("actions");
+const hasRail = Astro.slots.has("rail");
+---
+
+<section class="page-hero-shell">
+  <div class="glass page-hero-main reveal">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="page-title">{title}</h1>
+    <p class="page-hero-copy">{description}</p>
+    {
+      hasActions && (
+        <div class="page-hero-actions">
+          <slot name="actions" />
+        </div>
+      )
+    }
+  </div>
+
+  <aside class="glass page-rail reveal">
+    <p class="page-rail-title">{railTitle}</p>
+    {
+      railItems.length > 0 && (
+        <ul class="page-rail-list">
+          {railItems.map((item) => (
+            <li class="page-rail-item">
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+              {item.detail && <span>{item.detail}</span>}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {hasRail && <slot name="rail" />}
+  </aside>
+</section>
